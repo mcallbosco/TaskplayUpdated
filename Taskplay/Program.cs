@@ -11,6 +11,8 @@ namespace Taskplay
         static bool IsDarkModeOn => GetSettingState("DarkMode");
         static bool AreChangeSongButtonsShown => GetSettingState("ShowChangeSongButtons");
 
+
+
         static readonly Action<bool> restartAction = (b) => Application.Restart();
 
         /// <summary>
