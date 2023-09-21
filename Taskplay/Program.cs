@@ -1,6 +1,12 @@
 ﻿using System;
+using System.Net.Configuration;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
+using System.Security.Policy;
 using System.Windows.Forms;
+using Windows.Media;
+using Windows.Media.Control;
+using Windows.Media.Streaming.Adaptive;
 
 namespace Taskplay
 {
@@ -10,6 +16,14 @@ namespace Taskplay
 
         static bool IsDarkModeOn => GetSettingState("DarkMode");
         static bool AreChangeSongButtonsShown => GetSettingState("ShowChangeSongButtons");
+
+        static int refreshIntervalForMediaState = 500; //ms
+        
+        static int waitTimeAfterClickToRefresh = 3000; //ms
+
+        static int waitTimeRemaining = 0;
+
+        static bool dontShowSkipWhilePaused = GetSettingState("DontShowSkipWhilePaused");
 
 
 
@@ -21,6 +35,7 @@ namespace Taskplay
         [STAThread]
         static void Main()
         {
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Create system tray icons
@@ -58,8 +73,30 @@ namespace Taskplay
             previousIcon.MouseClick += new MouseEventHandler(previousIcon_MouseClick);
             previousIcon.ContextMenu = contextMenu;
 
+
+            var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask().Result;
+
+            //have mediaStateChange() run every 500 ms
+
+            var timer = new System.Threading.Timer((e) =>
+            {
+                mediaStateChange(sessionManager, playIcon, refreshIntervalForMediaState);
+            }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(refreshIntervalForMediaState));
+
+
+
+
+
+
+
             //Launch
             Application.Run();
+
+           
+
+
+
+            
         }
 
         private static void previousIcon_MouseClick(object sender, MouseEventArgs e)
@@ -97,9 +134,7 @@ namespace Taskplay
                 }
             }
 
-            // PLEASE NOTE; this method does NOT check whether the music has been paused by an external source.
-            //  This could be added by building in an check that listens to the state of the systems MusicPlayer
-            //   I hope this gives a nice base to start with. :)
+            
         }
 
         private static void nextIcon_MouseClick(object sender, MouseEventArgs e)
@@ -110,6 +145,22 @@ namespace Taskplay
                 keybd_event(0xB0, 0, 0x0001, IntPtr.Zero);
                 keybd_event(0xB0, 0, 0x0002, IntPtr.Zero);
             }
+        }
+        public static void updatePlayingIcon(bool playing, NotifyIcon playIcon)
+        {
+            if (playing == true)
+            {
+                // Start playing music and show the pause-icon
+                playIcon.Icon = IsDarkModeOn ? Properties.Resources.PauseDark : Properties.Resources.Pause;
+                _isMusicPlaying = true;
+            }
+            else
+            {
+                // Pause the music and display the Play-icon
+                playIcon.Icon = IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
+                _isMusicPlaying = false;
+            }
+            waitTimeRemaining = waitTimeAfterClickToRefresh;
         }
 
         private static void contextMenuSettings_Click(object sender, System.EventArgs e)
@@ -124,6 +175,47 @@ namespace Taskplay
             //Exit the app
             Application.Exit();
         }
+
+        //listener for media events
+        private static void mediaStateChange(GlobalSystemMediaTransportControlsSessionManager sessionManager1, NotifyIcon playIcon, int refreshIntervalForMediaState)
+        {
+            if (waitTimeRemaining > 0)
+            {
+                waitTimeRemaining -= refreshIntervalForMediaState;
+                return;
+            } else
+            {
+                waitTimeRemaining = 0;
+            }
+
+
+            // check through all sessions to see if anything is playing
+            var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask().Result;
+
+            for (int i = 0; i < sessionManager.GetSessions().Count; i++)
+            {
+                if (sessionManager.GetSessions()[i].GetPlaybackInfo().PlaybackStatus.ToString() == "Playing")
+                {
+                    updatePlayingIcon(true, playIcon);
+                    return;
+                }
+                else
+                {
+                    updatePlayingIcon(false, playIcon);
+                }
+            }
+
+
+
+
+
+           
+            
+            
+            
+        }
+
+
 
         private static bool GetSettingState(string settingName)
         {
