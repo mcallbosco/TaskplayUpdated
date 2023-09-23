@@ -32,9 +32,9 @@ namespace Taskplay
 
         static NotifyIcon playIcon = new NotifyIcon();
 
-        static NotifyIcon nextIcon = new NotifyIcon();
+        static NotifyIcon nextIcon = null;
 
-        static NotifyIcon previousIcon = new NotifyIcon();
+        static NotifyIcon previousIcon = null;
 
 
 
@@ -66,24 +66,17 @@ namespace Taskplay
             //Add the context menu items to the context menu
             contextMenu.MenuItems.Add(contextItemSettings);
             contextMenu.MenuItems.Add(contextItemExit);
-            //Setup nextIcon
-            nextIcon.Icon = IsDarkModeOn ? Properties.Resources.ForwardDark : Properties.Resources.Forward;
-            nextIcon.Text = "Next";
-            nextIcon.Visible = showNextButton && !dontShowSkipWhilePaused;
-            nextIcon.MouseClick += new MouseEventHandler(nextIcon_MouseClick);
-            nextIcon.ContextMenu = contextMenu;
+            nextIcon = spawnNextIcon(showNextButton);
+            previousIcon = spawnPreviousIcon(showPrevButton);
+
+
             //Setup playIcon
             playIcon.Icon = IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
             playIcon.Text = "Play / Pause";
             playIcon.Visible = true;
             playIcon.MouseClick += new MouseEventHandler(playIcon_MouseClick);
             playIcon.ContextMenu = contextMenu;
-            //Setup previousIcon
-            previousIcon.Icon = IsDarkModeOn ? Properties.Resources.BackwardDark : Properties.Resources.Backward;
-            previousIcon.Text = "Previous";
-            previousIcon.Visible = showPrevButton && !dontShowSkipWhilePaused;
-            previousIcon.MouseClick += new MouseEventHandler(previousIcon_MouseClick);
-            previousIcon.ContextMenu = contextMenu;
+            
 
 
             var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask().Result;
@@ -131,6 +124,32 @@ namespace Taskplay
                 keybd_event(0xB0, 0, 0x0002, IntPtr.Zero);
             }
         }
+
+        private static NotifyIcon spawnNextIcon(bool doit)
+        {
+            if (!doit) return null;
+            NotifyIcon newNextIcon = new NotifyIcon();
+            //Setup nextIcon
+            newNextIcon.Icon = IsDarkModeOn ? Properties.Resources.ForwardDark : Properties.Resources.Forward;
+            newNextIcon.Text = "Next";
+            newNextIcon.Visible = showNextButton;
+            newNextIcon.MouseClick += new MouseEventHandler(nextIcon_MouseClick);
+            return newNextIcon;
+        }
+
+        private static NotifyIcon spawnPreviousIcon(bool doIt)
+        {
+            if (!doIt) return null;
+            NotifyIcon newPreviousIcon = new NotifyIcon();
+            //Setup previousIcon
+            newPreviousIcon.Icon = IsDarkModeOn ? Properties.Resources.BackwardDark : Properties.Resources.Backward;
+            newPreviousIcon.Text = "Previous";
+            newPreviousIcon.Visible = showPrevButton;
+            newPreviousIcon.MouseClick += new MouseEventHandler(previousIcon_MouseClick);
+            return newPreviousIcon;
+        }
+
+
         public static void updatePlayingIcon(bool playing)
         {
             if (playing == true)
@@ -141,8 +160,8 @@ namespace Taskplay
                 playIcon.Text = "Pause";
                 if (dontShowSkipWhilePaused)
                 {
-                    nextIcon.Visible = showNextButton;
-                    previousIcon.Visible = showPrevButton;
+                    if (nextIcon == null) nextIcon = spawnNextIcon(true);
+                    if (previousIcon == null) previousIcon = spawnPreviousIcon(true);
                 }
             }
             else
@@ -153,8 +172,10 @@ namespace Taskplay
                 playIcon.Text = "Play";
                 if (dontShowSkipWhilePaused)
                 {
-                    nextIcon.Visible = false;
-                    previousIcon.Visible = false;
+                    if (nextIcon != null) nextIcon.Dispose();
+                    nextIcon = null;
+                    if (previousIcon != null) previousIcon.Dispose();
+                    nextIcon = null;
                 }
             }
             waitTimeRemaining = waitTimeAfterClickToRefresh;
@@ -239,9 +260,9 @@ namespace Taskplay
 
         public static void hideIcons()
         {
-            playIcon.Visible = false;
-            nextIcon.Visible = false;
-            previousIcon.Visible = false;
+            playIcon?.Dispose();
+            nextIcon?.Dispose();
+            previousIcon?.Dispose();
 
         }
         private static String GetSettingStateString(string settingName, string defaultValue)

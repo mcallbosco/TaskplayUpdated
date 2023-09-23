@@ -31,10 +31,15 @@
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.TabPage tabPageSync;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
+            this.numericUpDownWaitAfterClickSync = new System.Windows.Forms.NumericUpDown();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numericUpDownSyncInterval = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.checkBoxPlaybackSync = new System.Windows.Forms.CheckBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
+            this.checkBoxShowPrevSong = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowSongChangeButtonsWhilePaused = new System.Windows.Forms.CheckBox();
             this.checkBoxShowNextButton = new System.Windows.Forms.CheckBox();
             this.checkBoxDarkMode = new System.Windows.Forms.CheckBox();
             this.checkBoxAutorun = new System.Windows.Forms.CheckBox();
@@ -47,19 +52,14 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.buttonOK = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.numericUpDownSyncInterval = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.numericUpDownWaitAfterClickSync = new System.Windows.Forms.NumericUpDown();
-            this.checkBoxShowSongChangeButtonsWhilePaused = new System.Windows.Forms.CheckBox();
-            this.checkBoxShowPrevSong = new System.Windows.Forms.CheckBox();
             tabPageSync = new System.Windows.Forms.TabPage();
             tabPageSync.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWaitAfterClickSync)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSyncInterval)).BeginInit();
             this.tabControl.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSyncInterval)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWaitAfterClickSync)).BeginInit();
             this.SuspendLayout();
             // 
             // tabPageSync
@@ -76,6 +76,50 @@
             tabPageSync.TabIndex = 2;
             tabPageSync.Text = "Sync";
             tabPageSync.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDownWaitAfterClickSync
+            // 
+            this.numericUpDownWaitAfterClickSync.Location = new System.Drawing.Point(256, 86);
+            this.numericUpDownWaitAfterClickSync.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numericUpDownWaitAfterClickSync.Name = "numericUpDownWaitAfterClickSync";
+            this.numericUpDownWaitAfterClickSync.Size = new System.Drawing.Size(84, 29);
+            this.numericUpDownWaitAfterClickSync.TabIndex = 6;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(10, 88);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(240, 23);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Time To Pause Sync After Click";
+            this.toolTip1.SetToolTip(this.label2, resources.GetString("label2.ToolTip"));
+            // 
+            // numericUpDownSyncInterval
+            // 
+            this.numericUpDownSyncInterval.Location = new System.Drawing.Point(256, 49);
+            this.numericUpDownSyncInterval.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.numericUpDownSyncInterval.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.numericUpDownSyncInterval.Name = "numericUpDownSyncInterval";
+            this.numericUpDownSyncInterval.Size = new System.Drawing.Size(86, 29);
+            this.numericUpDownSyncInterval.TabIndex = 4;
+            this.numericUpDownSyncInterval.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
             // 
             // label1
             // 
@@ -125,6 +169,26 @@
             this.tabPageGeneral.TabIndex = 0;
             this.tabPageGeneral.Text = "General";
             this.tabPageGeneral.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShowPrevSong
+            // 
+            this.checkBoxShowPrevSong.AutoSize = true;
+            this.checkBoxShowPrevSong.Location = new System.Drawing.Point(6, 105);
+            this.checkBoxShowPrevSong.Name = "checkBoxShowPrevSong";
+            this.checkBoxShowPrevSong.Size = new System.Drawing.Size(245, 27);
+            this.checkBoxShowPrevSong.TabIndex = 6;
+            this.checkBoxShowPrevSong.Text = "Show previous song button";
+            this.checkBoxShowPrevSong.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShowSongChangeButtonsWhilePaused
+            // 
+            this.checkBoxShowSongChangeButtonsWhilePaused.AutoSize = true;
+            this.checkBoxShowSongChangeButtonsWhilePaused.Location = new System.Drawing.Point(6, 138);
+            this.checkBoxShowSongChangeButtonsWhilePaused.Name = "checkBoxShowSongChangeButtonsWhilePaused";
+            this.checkBoxShowSongChangeButtonsWhilePaused.Size = new System.Drawing.Size(342, 27);
+            this.checkBoxShowSongChangeButtonsWhilePaused.TabIndex = 5;
+            this.checkBoxShowSongChangeButtonsWhilePaused.Text = "Hide song change buttons while paused";
+            this.checkBoxShowSongChangeButtonsWhilePaused.UseVisualStyleBackColor = true;
             // 
             // checkBoxShowNextButton
             // 
@@ -249,70 +313,6 @@
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // numericUpDownSyncInterval
-            // 
-            this.numericUpDownSyncInterval.Location = new System.Drawing.Point(256, 49);
-            this.numericUpDownSyncInterval.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numericUpDownSyncInterval.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            this.numericUpDownSyncInterval.Name = "numericUpDownSyncInterval";
-            this.numericUpDownSyncInterval.Size = new System.Drawing.Size(86, 29);
-            this.numericUpDownSyncInterval.TabIndex = 4;
-            this.numericUpDownSyncInterval.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 88);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(240, 23);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Time To Pause Sync After Click";
-            this.toolTip1.SetToolTip(this.label2, resources.GetString("label2.ToolTip"));
-            // 
-            // numericUpDownWaitAfterClickSync
-            // 
-            this.numericUpDownWaitAfterClickSync.Location = new System.Drawing.Point(256, 86);
-            this.numericUpDownWaitAfterClickSync.Maximum = new decimal(new int[] {
-            10000,
-            0,
-            0,
-            0});
-            this.numericUpDownWaitAfterClickSync.Name = "numericUpDownWaitAfterClickSync";
-            this.numericUpDownWaitAfterClickSync.Size = new System.Drawing.Size(84, 29);
-            this.numericUpDownWaitAfterClickSync.TabIndex = 6;
-            // 
-            // checkBoxShowSongChangeButtonsWhilePaused
-            // 
-            this.checkBoxShowSongChangeButtonsWhilePaused.AutoSize = true;
-            this.checkBoxShowSongChangeButtonsWhilePaused.Location = new System.Drawing.Point(8, 138);
-            this.checkBoxShowSongChangeButtonsWhilePaused.Name = "checkBoxShowSongChangeButtonsWhilePaused";
-            this.checkBoxShowSongChangeButtonsWhilePaused.Size = new System.Drawing.Size(342, 27);
-            this.checkBoxShowSongChangeButtonsWhilePaused.TabIndex = 5;
-            this.checkBoxShowSongChangeButtonsWhilePaused.Text = "Hide song change buttons while paused";
-            this.checkBoxShowSongChangeButtonsWhilePaused.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxShowPrevSong
-            // 
-            this.checkBoxShowPrevSong.AutoSize = true;
-            this.checkBoxShowPrevSong.Location = new System.Drawing.Point(6, 105);
-            this.checkBoxShowPrevSong.Name = "checkBoxShowPrevSong";
-            this.checkBoxShowPrevSong.Size = new System.Drawing.Size(245, 27);
-            this.checkBoxShowPrevSong.TabIndex = 6;
-            this.checkBoxShowPrevSong.Text = "Show previous song button";
-            this.checkBoxShowPrevSong.UseVisualStyleBackColor = true;
-            // 
             // SettingsForm
             // 
             this.AcceptButton = this.buttonOK;
@@ -333,13 +333,13 @@
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             tabPageSync.ResumeLayout(false);
             tabPageSync.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWaitAfterClickSync)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSyncInterval)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.tabPageGeneral.ResumeLayout(false);
             this.tabPageGeneral.PerformLayout();
             this.tabPageAbout.ResumeLayout(false);
             this.tabPageAbout.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSyncInterval)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWaitAfterClickSync)).EndInit();
             this.ResumeLayout(false);
 
         }
