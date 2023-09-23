@@ -1,34 +1,21 @@
 ﻿using System;
-using System.Net.Configuration;
 using System.Runtime.InteropServices;
-using System.Security.Cryptography.X509Certificates;
-using System.Security.Policy;
 using System.Windows.Forms;
-using Windows.Media;
 using Windows.Media.Control;
-using Windows.Media.Streaming.Adaptive;
 
 namespace Taskplay
 {
     static class Program
     {
         static bool _isMusicPlaying = false;    // Bool to keep in check if the user is playing music
-
         static bool IsDarkModeOn => GetSettingState("DarkMode");
         static bool showNextButton => GetSettingState("ShowNextButton", true);
-
         static bool showPrevButton => GetSettingState("ShowPrevButton", true);
-
         static bool IsSyncEnabled => GetSettingState("SyncEnabled", true);
-
         static int SyncInterval => int.Parse(GetSettingStateString("SyncInterval", "500"));
-
-        
-        static int waitTimeAfterClickToRefresh = int.Parse(GetSettingStateString("PauseSyncAfterClick", "3000")); //ms
-
+        static int waitTimeAfterClickToRefresh => int.Parse(GetSettingStateString("PauseSyncAfterClick", "3000")); //ms
         static int waitTimeRemaining = 0;
-
-        static bool dontShowSkipWhilePaused = GetSettingState("DontShowSkipWhilePaused");
+        static bool dontShowSkipWhilePaused => GetSettingState("DontShowSkipWhilePaused");
 
         static NotifyIcon playIcon = new NotifyIcon();
 
@@ -36,7 +23,7 @@ namespace Taskplay
 
         static NotifyIcon previousIcon = null;
 
-
+        static ContextMenu contextMenu = new ContextMenu();
 
         static readonly Action<bool> restartAction = (b) => Application.Restart();
 
@@ -49,13 +36,16 @@ namespace Taskplay
             //check for already running
             if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Length > 1)
             {
-                MessageBox.Show("Taskplay is already running", "Taskplay", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //sleep for 500 ms and then check again
+                System.Threading.Thread.Sleep(500);
+                if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Length > 1)
+                { MessageBox.Show("Taskplay is already running", "Taskplay", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
+                }
             }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Create the context menu and its items
-            ContextMenu contextMenu = new ContextMenu();
             MenuItem contextItemSettings = new MenuItem();
             MenuItem contextItemExit = new MenuItem();
             //Setup the context menu items
@@ -66,12 +56,13 @@ namespace Taskplay
             //Add the context menu items to the context menu
             contextMenu.MenuItems.Add(contextItemSettings);
             contextMenu.MenuItems.Add(contextItemExit);
-            nextIcon = spawnNextIcon(showNextButton);
-            previousIcon = spawnPreviousIcon(showPrevButton);
+
+            //Setup next and prev icons
+            
 
 
             //Setup playIcon
-            playIcon.Icon = IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
+            updatePlayingIcon(_isMusicPlaying);
             playIcon.Text = "Play / Pause";
             playIcon.Visible = true;
             playIcon.MouseClick += new MouseEventHandler(playIcon_MouseClick);
@@ -108,7 +99,7 @@ namespace Taskplay
             {
                 keybd_event(0xB3, 0, 0x0001, IntPtr.Zero);
                 keybd_event(0xB3, 0, 0x0002, IntPtr.Zero);
-
+                waitTimeRemaining = waitTimeAfterClickToRefresh;
                 updatePlayingIcon(!_isMusicPlaying);
             }
 
@@ -134,6 +125,7 @@ namespace Taskplay
             newNextIcon.Text = "Next";
             newNextIcon.Visible = showNextButton;
             newNextIcon.MouseClick += new MouseEventHandler(nextIcon_MouseClick);
+            newNextIcon.ContextMenu = contextMenu;
             return newNextIcon;
         }
 
@@ -144,8 +136,9 @@ namespace Taskplay
             //Setup previousIcon
             newPreviousIcon.Icon = IsDarkModeOn ? Properties.Resources.BackwardDark : Properties.Resources.Backward;
             newPreviousIcon.Text = "Previous";
-            newPreviousIcon.Visible = showPrevButton;
+            newPreviousIcon.Visible = true;
             newPreviousIcon.MouseClick += new MouseEventHandler(previousIcon_MouseClick);
+            newPreviousIcon.ContextMenu = contextMenu;
             return newPreviousIcon;
         }
 
@@ -158,11 +151,11 @@ namespace Taskplay
                 playIcon.Icon = IsDarkModeOn ? Properties.Resources.PauseDark : Properties.Resources.Pause;
                 _isMusicPlaying = true;
                 playIcon.Text = "Pause";
-                if (dontShowSkipWhilePaused)
-                {
-                    if (nextIcon == null) nextIcon = spawnNextIcon(true);
-                    if (previousIcon == null) previousIcon = spawnPreviousIcon(true);
-                }
+                //Spawn the next and previous icons if they are not already spawned
+                
+                if (nextIcon == null) nextIcon = spawnNextIcon(showNextButton);
+                if (previousIcon == null) previousIcon = spawnPreviousIcon(showPrevButton);
+                
             }
             else
             {
@@ -170,15 +163,22 @@ namespace Taskplay
                 playIcon.Icon = IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
                 _isMusicPlaying = false;
                 playIcon.Text = "Play";
+                //Dispose the next and previous icons if we are not showing them while paused
                 if (dontShowSkipWhilePaused)
                 {
                     if (nextIcon != null) nextIcon.Dispose();
                     nextIcon = null;
                     if (previousIcon != null) previousIcon.Dispose();
-                    nextIcon = null;
+                    previousIcon = null;
+                }
+                else
+                {
+                    if (nextIcon == null) nextIcon = spawnNextIcon(showNextButton);
+                    if (previousIcon == null) previousIcon = spawnPreviousIcon(showPrevButton);
                 }
             }
-            waitTimeRemaining = waitTimeAfterClickToRefresh;
+            
+            
         }
 
         private static void contextMenuSettings_Click(object sender, System.EventArgs e)
@@ -191,6 +191,9 @@ namespace Taskplay
         private static void contextMenuExit_Click(object sender, System.EventArgs e)
         {
             hideIcons();
+            //sleep for 500 ms
+            System.Threading.Thread.Sleep(500);
+
 
             //Exit the app
             Application.Exit();
@@ -201,7 +204,7 @@ namespace Taskplay
         //listener for media events
         private static void mediaStateChange(GlobalSystemMediaTransportControlsSessionManager sessionManager1, NotifyIcon playIcon, int refreshIntervalForMediaState)
         {
-            
+            //wait for the interval to pass
             if (waitTimeRemaining > 0)
             {
                 waitTimeRemaining -= refreshIntervalForMediaState;
@@ -227,22 +230,12 @@ namespace Taskplay
                     updatePlayingIcon(false);
                 }
             }
-
-
-
-
-
-           
-            
-            
-            
         }
 
 
 
         private static bool GetSettingState(string settingName, bool defaultValueBool = false)
         {
-            //for backwards compatibility with old settings
             int defaultValue = defaultValueBool ? 1 : 0;
             var subKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Taskplay");
 
@@ -254,17 +247,9 @@ namespace Taskplay
                 return defaultValueBool;
             }
 
-
             return (int)keyValue == 1;
         }
 
-        public static void hideIcons()
-        {
-            playIcon?.Dispose();
-            nextIcon?.Dispose();
-            previousIcon?.Dispose();
-
-        }
         private static String GetSettingStateString(string settingName, string defaultValue)
         {
             var subKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Taskplay");
@@ -280,6 +265,14 @@ namespace Taskplay
 
             return keyValue.ToString();
         }
+        public static void hideIcons()
+        {
+            playIcon?.Dispose();
+            nextIcon?.Dispose();
+            previousIcon?.Dispose();
+
+        }
+
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern void keybd_event(byte virtualKey, byte scanCode, uint flags, IntPtr extraInfo);
