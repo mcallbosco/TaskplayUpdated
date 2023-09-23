@@ -15,7 +15,9 @@ namespace Taskplay
         static bool _isMusicPlaying = false;    // Bool to keep in check if the user is playing music
 
         static bool IsDarkModeOn => GetSettingState("DarkMode");
-        static bool AreChangeSongButtonsShown => GetSettingState("ShowChangeSongButtons", true);
+        static bool showNextButton => GetSettingState("ShowNextButton", true);
+
+        static bool showPrevButton => GetSettingState("ShowPrevButton", true);
 
         static bool IsSyncEnabled => GetSettingState("SyncEnabled", true);
 
@@ -44,8 +46,12 @@ namespace Taskplay
         [STAThread]
         static void Main()
         {
-            
-
+            //check for already running
+            if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Length > 1)
+            {
+                MessageBox.Show("Taskplay is already running", "Taskplay", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             //Create the context menu and its items
@@ -63,7 +69,7 @@ namespace Taskplay
             //Setup nextIcon
             nextIcon.Icon = IsDarkModeOn ? Properties.Resources.ForwardDark : Properties.Resources.Forward;
             nextIcon.Text = "Next";
-            nextIcon.Visible = AreChangeSongButtonsShown;
+            nextIcon.Visible = showNextButton && !dontShowSkipWhilePaused;
             nextIcon.MouseClick += new MouseEventHandler(nextIcon_MouseClick);
             nextIcon.ContextMenu = contextMenu;
             //Setup playIcon
@@ -75,7 +81,7 @@ namespace Taskplay
             //Setup previousIcon
             previousIcon.Icon = IsDarkModeOn ? Properties.Resources.BackwardDark : Properties.Resources.Backward;
             previousIcon.Text = "Previous";
-            previousIcon.Visible = AreChangeSongButtonsShown;
+            previousIcon.Visible = showPrevButton && !dontShowSkipWhilePaused;
             previousIcon.MouseClick += new MouseEventHandler(previousIcon_MouseClick);
             previousIcon.ContextMenu = contextMenu;
 
@@ -88,20 +94,8 @@ namespace Taskplay
                     mediaStateChange(sessionManager, playIcon, SyncInterval);
                 }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(SyncInterval));
             }
-
-
-
-
-
-
             //Launch
             Application.Run();
-
-           
-
-
-
-            
         }
 
         private static void previousIcon_MouseClick(object sender, MouseEventArgs e)
@@ -144,10 +138,11 @@ namespace Taskplay
                 // Start playing music and show the pause-icon
                 playIcon.Icon = IsDarkModeOn ? Properties.Resources.PauseDark : Properties.Resources.Pause;
                 _isMusicPlaying = true;
+                playIcon.Text = "Pause";
                 if (dontShowSkipWhilePaused)
                 {
-                    nextIcon.Visible = true;
-                    previousIcon.Visible = true;
+                    nextIcon.Visible = showNextButton;
+                    previousIcon.Visible = showPrevButton;
                 }
             }
             else
@@ -155,6 +150,7 @@ namespace Taskplay
                 // Pause the music and display the Play-icon
                 playIcon.Icon = IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
                 _isMusicPlaying = false;
+                playIcon.Text = "Play";
                 if (dontShowSkipWhilePaused)
                 {
                     nextIcon.Visible = false;
@@ -167,20 +163,19 @@ namespace Taskplay
         private static void contextMenuSettings_Click(object sender, System.EventArgs e)
         {
             //Show Settings form
-            var settingsForm = new SettingsForm(IsDarkModeOn, AreChangeSongButtonsShown, restartAction, IsSyncEnabled, SyncInterval, waitTimeAfterClickToRefresh, dontShowSkipWhilePaused);
+            var settingsForm = new SettingsForm(IsDarkModeOn, showNextButton, showPrevButton, restartAction, IsSyncEnabled, SyncInterval, waitTimeAfterClickToRefresh, dontShowSkipWhilePaused);
             settingsForm.ShowDialog();
         }
 
         private static void contextMenuExit_Click(object sender, System.EventArgs e)
         {
-            //hide the icons
-            playIcon.Visible = false;
-            nextIcon.Visible = false;
-            previousIcon.Visible = false;
+            hideIcons();
 
             //Exit the app
             Application.Exit();
         }
+
+        
 
         //listener for media events
         private static void mediaStateChange(GlobalSystemMediaTransportControlsSessionManager sessionManager1, NotifyIcon playIcon, int refreshIntervalForMediaState)
@@ -240,6 +235,14 @@ namespace Taskplay
 
 
             return (int)keyValue == 1;
+        }
+
+        public static void hideIcons()
+        {
+            playIcon.Visible = false;
+            nextIcon.Visible = false;
+            previousIcon.Visible = false;
+
         }
         private static String GetSettingStateString(string settingName, string defaultValue)
         {

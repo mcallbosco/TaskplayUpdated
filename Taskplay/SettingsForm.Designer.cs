@@ -35,7 +35,7 @@
             this.checkBoxPlaybackSync = new System.Windows.Forms.CheckBox();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageGeneral = new System.Windows.Forms.TabPage();
-            this.checkBoxShowSongChangeButtons = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowNextButton = new System.Windows.Forms.CheckBox();
             this.checkBoxDarkMode = new System.Windows.Forms.CheckBox();
             this.checkBoxAutorun = new System.Windows.Forms.CheckBox();
             this.tabPageAbout = new System.Windows.Forms.TabPage();
@@ -52,6 +52,7 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.numericUpDownWaitAfterClickSync = new System.Windows.Forms.NumericUpDown();
             this.checkBoxShowSongChangeButtonsWhilePaused = new System.Windows.Forms.CheckBox();
+            this.checkBoxShowPrevSong = new System.Windows.Forms.CheckBox();
             tabPageSync = new System.Windows.Forms.TabPage();
             tabPageSync.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -102,8 +103,8 @@
             this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl.Controls.Add(this.tabPageGeneral);
-            this.tabControl.Controls.Add(this.tabPageAbout);
             this.tabControl.Controls.Add(tabPageSync);
+            this.tabControl.Controls.Add(this.tabPageAbout);
             this.tabControl.Location = new System.Drawing.Point(6, 7);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
@@ -112,8 +113,9 @@
             // 
             // tabPageGeneral
             // 
+            this.tabPageGeneral.Controls.Add(this.checkBoxShowPrevSong);
             this.tabPageGeneral.Controls.Add(this.checkBoxShowSongChangeButtonsWhilePaused);
-            this.tabPageGeneral.Controls.Add(this.checkBoxShowSongChangeButtons);
+            this.tabPageGeneral.Controls.Add(this.checkBoxShowNextButton);
             this.tabPageGeneral.Controls.Add(this.checkBoxDarkMode);
             this.tabPageGeneral.Controls.Add(this.checkBoxAutorun);
             this.tabPageGeneral.Location = new System.Drawing.Point(4, 32);
@@ -124,15 +126,15 @@
             this.tabPageGeneral.Text = "General";
             this.tabPageGeneral.UseVisualStyleBackColor = true;
             // 
-            // checkBoxShowSongChangeButtons
+            // checkBoxShowNextButton
             // 
-            this.checkBoxShowSongChangeButtons.AutoSize = true;
-            this.checkBoxShowSongChangeButtons.Location = new System.Drawing.Point(6, 72);
-            this.checkBoxShowSongChangeButtons.Name = "checkBoxShowSongChangeButtons";
-            this.checkBoxShowSongChangeButtons.Size = new System.Drawing.Size(259, 27);
-            this.checkBoxShowSongChangeButtons.TabIndex = 4;
-            this.checkBoxShowSongChangeButtons.Text = "Show song changing buttons";
-            this.checkBoxShowSongChangeButtons.UseVisualStyleBackColor = true;
+            this.checkBoxShowNextButton.AutoSize = true;
+            this.checkBoxShowNextButton.Location = new System.Drawing.Point(6, 72);
+            this.checkBoxShowNextButton.Name = "checkBoxShowNextButton";
+            this.checkBoxShowNextButton.Size = new System.Drawing.Size(214, 27);
+            this.checkBoxShowNextButton.TabIndex = 4;
+            this.checkBoxShowNextButton.Text = "Show next song button";
+            this.checkBoxShowNextButton.UseVisualStyleBackColor = true;
             // 
             // checkBoxDarkMode
             // 
@@ -294,12 +296,22 @@
             // checkBoxShowSongChangeButtonsWhilePaused
             // 
             this.checkBoxShowSongChangeButtonsWhilePaused.AutoSize = true;
-            this.checkBoxShowSongChangeButtonsWhilePaused.Location = new System.Drawing.Point(6, 105);
+            this.checkBoxShowSongChangeButtonsWhilePaused.Location = new System.Drawing.Point(8, 138);
             this.checkBoxShowSongChangeButtonsWhilePaused.Name = "checkBoxShowSongChangeButtonsWhilePaused";
             this.checkBoxShowSongChangeButtonsWhilePaused.Size = new System.Drawing.Size(342, 27);
             this.checkBoxShowSongChangeButtonsWhilePaused.TabIndex = 5;
             this.checkBoxShowSongChangeButtonsWhilePaused.Text = "Hide song change buttons while paused";
             this.checkBoxShowSongChangeButtonsWhilePaused.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShowPrevSong
+            // 
+            this.checkBoxShowPrevSong.AutoSize = true;
+            this.checkBoxShowPrevSong.Location = new System.Drawing.Point(6, 105);
+            this.checkBoxShowPrevSong.Name = "checkBoxShowPrevSong";
+            this.checkBoxShowPrevSong.Size = new System.Drawing.Size(245, 27);
+            this.checkBoxShowPrevSong.TabIndex = 6;
+            this.checkBoxShowPrevSong.Text = "Show previous song button";
+            this.checkBoxShowPrevSong.UseVisualStyleBackColor = true;
             // 
             // SettingsForm
             // 
@@ -346,7 +358,7 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.Button buttonOK;
         private System.Windows.Forms.CheckBox checkBoxDarkMode;
-        private System.Windows.Forms.CheckBox checkBoxShowSongChangeButtons;
+        private System.Windows.Forms.CheckBox checkBoxShowNextButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox checkBoxPlaybackSync;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
@@ -355,5 +367,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.NumericUpDown numericUpDownWaitAfterClickSync;
         private System.Windows.Forms.CheckBox checkBoxShowSongChangeButtonsWhilePaused;
+        private System.Windows.Forms.CheckBox checkBoxShowPrevSong;
     }
 }
