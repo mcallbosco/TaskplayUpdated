@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Taskplay")]
+[assembly: AssemblyTitle("TaskplayUpdated")]
 [assembly: AssemblyDescription("Taskplay is a small utility which adds media playback controls to the Windows System Tray")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("evil_pro")]
+[assembly: AssemblyCompany("mcallbosco, forked from evil_pro")]
 [assembly: AssemblyProduct("Taskplay")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.1.0")]
-[assembly: AssemblyFileVersion("1.0.1.0")]
+[assembly: AssemblyVersion("2.0.0.0")]
+[assembly: AssemblyFileVersion("2.0.0.0")]

@@ -1,17 +1,29 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using Windows.Media.Control;
 
 namespace Taskplay
 {
     static class Program
     {
         static bool _isMusicPlaying = false;    // Bool to keep in check if the user is playing music
-
         static bool IsDarkModeOn => GetSettingState("DarkMode");
-        static bool AreChangeSongButtonsShown => GetSettingState("ShowChangeSongButtons");
+        static bool showNextButton => GetSettingState("ShowNextButton", true);
+        static bool showPrevButton => GetSettingState("ShowPrevButton", true);
+        static bool IsSyncEnabled => GetSettingState("SyncEnabled", true);
+        static int SyncInterval => int.Parse(GetSettingStateString("SyncInterval", "500"));
+        static int waitTimeAfterClickToRefresh => int.Parse(GetSettingStateString("PauseSyncAfterClick", "3000")); //ms
+        static int waitTimeRemaining = 0;
+        static bool dontShowSkipWhilePaused => GetSettingState("DontShowSkipWhilePaused");
 
+        static NotifyIcon playIcon = new NotifyIcon();
 
+        static NotifyIcon nextIcon = null;
+
+        static NotifyIcon previousIcon = null;
+
+        static ContextMenu contextMenu = new ContextMenu();
 
         static readonly Action<bool> restartAction = (b) => Application.Restart();
 
@@ -21,14 +33,19 @@ namespace Taskplay
         [STAThread]
         static void Main()
         {
+            //check for already running
+            if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Length > 1)
+            {
+                //sleep for 500 ms and then check again
+                System.Threading.Thread.Sleep(500);
+                if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Length > 1)
+                { MessageBox.Show("Taskplay is already running", "Taskplay", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+                }
+            }
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //Create system tray icons
-            NotifyIcon previousIcon = new NotifyIcon();
-            NotifyIcon playIcon = new NotifyIcon();
-            NotifyIcon nextIcon = new NotifyIcon();
             //Create the context menu and its items
-            ContextMenu contextMenu = new ContextMenu();
             MenuItem contextItemSettings = new MenuItem();
             MenuItem contextItemExit = new MenuItem();
             //Setup the context menu items
@@ -39,25 +56,28 @@ namespace Taskplay
             //Add the context menu items to the context menu
             contextMenu.MenuItems.Add(contextItemSettings);
             contextMenu.MenuItems.Add(contextItemExit);
-            //Setup nextIcon
-            nextIcon.Icon = IsDarkModeOn ? Properties.Resources.ForwardDark : Properties.Resources.Forward;
-            nextIcon.Text = "Next";
-            nextIcon.Visible = AreChangeSongButtonsShown;
-            nextIcon.MouseClick += new MouseEventHandler(nextIcon_MouseClick);
-            nextIcon.ContextMenu = contextMenu;
+
+            //Setup next and prev icons
+            
+
+
             //Setup playIcon
-            playIcon.Icon = IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
+            updatePlayingIcon(_isMusicPlaying);
             playIcon.Text = "Play / Pause";
             playIcon.Visible = true;
             playIcon.MouseClick += new MouseEventHandler(playIcon_MouseClick);
             playIcon.ContextMenu = contextMenu;
-            //Setup previousIcon
-            previousIcon.Icon = IsDarkModeOn ? Properties.Resources.BackwardDark : Properties.Resources.Backward;
-            previousIcon.Text = "Previous";
-            previousIcon.Visible = AreChangeSongButtonsShown;
-            previousIcon.MouseClick += new MouseEventHandler(previousIcon_MouseClick);
-            previousIcon.ContextMenu = contextMenu;
+            
 
+
+            var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask().Result;
+
+            if (IsSyncEnabled) { 
+                var timer = new System.Threading.Timer((e) =>
+                {
+                    mediaStateChange(sessionManager, playIcon, SyncInterval);
+                }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(SyncInterval));
+            }
             //Launch
             Application.Run();
         }
@@ -79,27 +99,11 @@ namespace Taskplay
             {
                 keybd_event(0xB3, 0, 0x0001, IntPtr.Zero);
                 keybd_event(0xB3, 0, 0x0002, IntPtr.Zero);
-
-                // Get the Play-button
-                var playIcon = (NotifyIcon)sender;
-
-                if (_isMusicPlaying == false)
-                {
-                    // Start playing music and show the pause-icon
-                    playIcon.Icon = IsDarkModeOn ? Properties.Resources.PauseDark : Properties.Resources.Pause;
-                    _isMusicPlaying = true;
-                }
-                else
-                {
-                    // Pause the music and display the Play-icon
-                    playIcon.Icon = IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
-                    _isMusicPlaying = false;
-                }
+                waitTimeRemaining = waitTimeAfterClickToRefresh;
+                updatePlayingIcon(!_isMusicPlaying);
             }
 
-            // PLEASE NOTE; this method does NOT check whether the music has been paused by an external source.
-            //  This could be added by building in an check that listens to the state of the systems MusicPlayer
-            //   I hope this gives a nice base to start with. :)
+            
         }
 
         private static void nextIcon_MouseClick(object sender, MouseEventArgs e)
@@ -112,20 +116,141 @@ namespace Taskplay
             }
         }
 
+        private static NotifyIcon spawnNextIcon(bool doit)
+        {
+            if (!doit) return null;
+            NotifyIcon newNextIcon = new NotifyIcon();
+            //Setup nextIcon
+            newNextIcon.Icon = IsDarkModeOn ? Properties.Resources.ForwardDark : Properties.Resources.Forward;
+            newNextIcon.Text = "Next";
+            newNextIcon.Visible = showNextButton;
+            newNextIcon.MouseClick += new MouseEventHandler(nextIcon_MouseClick);
+            newNextIcon.ContextMenu = contextMenu;
+            return newNextIcon;
+        }
+
+        private static NotifyIcon spawnPreviousIcon(bool doIt)
+        {
+            if (!doIt) return null;
+            NotifyIcon newPreviousIcon = new NotifyIcon();
+            //Setup previousIcon
+            newPreviousIcon.Icon = IsDarkModeOn ? Properties.Resources.BackwardDark : Properties.Resources.Backward;
+            newPreviousIcon.Text = "Previous";
+            newPreviousIcon.Visible = true;
+            newPreviousIcon.MouseClick += new MouseEventHandler(previousIcon_MouseClick);
+            newPreviousIcon.ContextMenu = contextMenu;
+            return newPreviousIcon;
+        }
+
+
+        public static void updatePlayingIcon(bool playing)
+        {
+            if (playing == true)
+            {
+                // Start playing music and show the pause-icon
+                playIcon.Icon = IsDarkModeOn ? Properties.Resources.PauseDark : Properties.Resources.Pause;
+                _isMusicPlaying = true;
+                playIcon.Text = "Pause";
+                //Spawn the next and previous icons if they are not already spawned
+                
+                if (nextIcon == null) nextIcon = spawnNextIcon(showNextButton);
+                if (previousIcon == null) previousIcon = spawnPreviousIcon(showPrevButton);
+                
+            }
+            else
+            {
+                // Pause the music and display the Play-icon
+                playIcon.Icon = IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
+                _isMusicPlaying = false;
+                playIcon.Text = "Play";
+                //Dispose the next and previous icons if we are not showing them while paused
+                if (dontShowSkipWhilePaused)
+                {
+                    if (nextIcon != null) nextIcon.Dispose();
+                    nextIcon = null;
+                    if (previousIcon != null) previousIcon.Dispose();
+                    previousIcon = null;
+                }
+                else
+                {
+                    if (nextIcon == null) nextIcon = spawnNextIcon(showNextButton);
+                    if (previousIcon == null) previousIcon = spawnPreviousIcon(showPrevButton);
+                }
+            }
+            
+            
+        }
+
         private static void contextMenuSettings_Click(object sender, System.EventArgs e)
         {
             //Show Settings form
-            var settingsForm = new SettingsForm(IsDarkModeOn, AreChangeSongButtonsShown, restartAction);
+            var settingsForm = new SettingsForm(IsDarkModeOn, showNextButton, showPrevButton, restartAction, IsSyncEnabled, SyncInterval, waitTimeAfterClickToRefresh, dontShowSkipWhilePaused);
             settingsForm.ShowDialog();
         }
 
         private static void contextMenuExit_Click(object sender, System.EventArgs e)
         {
+            hideIcons();
+            //sleep for 500 ms
+            System.Threading.Thread.Sleep(500);
+
+
             //Exit the app
             Application.Exit();
         }
 
-        private static bool GetSettingState(string settingName)
+        
+
+        //listener for media events
+        private static void mediaStateChange(GlobalSystemMediaTransportControlsSessionManager sessionManager1, NotifyIcon playIcon, int refreshIntervalForMediaState)
+        {
+            //wait for the interval to pass
+            if (waitTimeRemaining > 0)
+            {
+                waitTimeRemaining -= refreshIntervalForMediaState;
+                return;
+            } else
+            {
+                waitTimeRemaining = 0;
+            }
+
+
+            // check through all sessions to see if anything is playing
+            var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask().Result;
+
+            for (int i = 0; i < sessionManager.GetSessions().Count; i++)
+            {
+                if (sessionManager.GetSessions()[i].GetPlaybackInfo().PlaybackStatus.ToString() == "Playing")
+                {
+                    updatePlayingIcon(true);
+                    return;
+                }
+                else
+                {
+                    updatePlayingIcon(false);
+                }
+            }
+        }
+
+
+
+        private static bool GetSettingState(string settingName, bool defaultValueBool = false)
+        {
+            int defaultValue = defaultValueBool ? 1 : 0;
+            var subKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Taskplay");
+
+            var keyValue = subKey.GetValue(settingName);
+
+            if (keyValue == null)
+            {
+                subKey.SetValue(settingName, defaultValue);
+                return defaultValueBool;
+            }
+
+            return (int)keyValue == 1;
+        }
+
+        private static String GetSettingStateString(string settingName, string defaultValue)
         {
             var subKey = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Taskplay");
 
@@ -133,12 +258,21 @@ namespace Taskplay
 
             if (keyValue == null)
             {
-                subKey.SetValue(settingName, 0);
-                return false;
+                subKey.SetValue(settingName, defaultValue, Microsoft.Win32.RegistryValueKind.String);
+                return defaultValue;
             }
 
-            return (int)keyValue == 1;
+
+            return keyValue.ToString();
         }
+        public static void hideIcons()
+        {
+            playIcon?.Dispose();
+            nextIcon?.Dispose();
+            previousIcon?.Dispose();
+
+        }
+
 
         [DllImport("user32.dll", SetLastError = true)]
         public static extern void keybd_event(byte virtualKey, byte scanCode, uint flags, IntPtr extraInfo);
