@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Windows.Media.Control;
@@ -7,7 +8,7 @@ namespace Taskplay
 {
     static class Program
     {
-        static bool _isMusicPlaying = false;    // Bool to keep in check if the user is playing music
+        static bool _isMusicPlaying = true;    // Bool to keep in check if the user is playing music
         static bool IsDarkModeOn => GetSettingState("DarkMode");
         static bool showNextButton => GetSettingState("ShowNextButton", true);
         static bool showPrevButton => GetSettingState("ShowPrevButton", true);
@@ -67,18 +68,32 @@ namespace Taskplay
             playIcon.Visible = true;
             playIcon.MouseClick += new MouseEventHandler(playIcon_MouseClick);
             playIcon.ContextMenu = contextMenu;
-            
+
 
 
             var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask().Result;
+            bool firstRun = true;
+            updatePlayingIcon(_isMusicPlaying);
 
-            if (IsSyncEnabled) { 
-                var timer = new System.Threading.Timer((e) =>
-                {
-                    mediaStateChange(sessionManager, playIcon, SyncInterval);
-                }, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(SyncInterval));
+            if (IsSyncEnabled) {
+
+
+                //run                         mediaStateChange(sessionManager, playIcon, SyncInterval); 
+                //every SyncInterval ms
+
+                Timer timer = new Timer();
+                timer.Interval = SyncInterval;
+                timer.Tick += (sender, args) => mediaStateChange(sessionManager, playIcon, SyncInterval);
+                timer.Start();
+
+
+
+
             }
-            //Launch
+
+
+
+
             Application.Run();
         }
 
@@ -147,6 +162,7 @@ namespace Taskplay
         {
             if (playing == true)
             {
+                if (_isMusicPlaying) return;
                 // Start playing music and show the pause-icon
                 playIcon.Icon = IsDarkModeOn ? Properties.Resources.PauseDark : Properties.Resources.Pause;
                 _isMusicPlaying = true;
@@ -159,6 +175,7 @@ namespace Taskplay
             }
             else
             {
+                if (!_isMusicPlaying) return;
                 // Pause the music and display the Play-icon
                 playIcon.Icon = IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
                 _isMusicPlaying = false;
@@ -216,20 +233,21 @@ namespace Taskplay
 
 
             // check through all sessions to see if anything is playing
-            var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask().Result;
+            //var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask().Result;
 
-            for (int i = 0; i < sessionManager.GetSessions().Count; i++)
+            for (int i = 0; i < sessionManager1.GetSessions().Count; i++)
             {
-                if (sessionManager.GetSessions()[i].GetPlaybackInfo().PlaybackStatus.ToString() == "Playing")
+                if (sessionManager1.GetSessions()[i].GetPlaybackInfo().PlaybackStatus.ToString() == "Playing")
                 {
-                    updatePlayingIcon(true);
+                    if (_isMusicPlaying == false) updatePlayingIcon(true);
                     return;
                 }
-                else
-                {
-                    updatePlayingIcon(false);
-                }
+
             }
+            if (_isMusicPlaying == true) updatePlayingIcon(false);
+
+            
+
         }
 
 
