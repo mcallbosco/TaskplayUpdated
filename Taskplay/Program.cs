@@ -8,6 +8,7 @@ namespace Taskplay
 {
     static class Program
     {
+        static bool windowsDarkMode = Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1).ToString() == "0";
         static bool _isMusicPlaying = true;    // Bool to keep in check if the user is playing music
         static bool IsDarkModeOn => GetSettingState("DarkMode");
         static bool showNextButton => GetSettingState("ShowNextButton", true);
@@ -25,6 +26,7 @@ namespace Taskplay
         static NotifyIcon previousIcon = null;
 
         static ContextMenu contextMenu = new ContextMenu();
+        static ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
 
         static readonly Action<bool> restartAction = (b) => Application.Restart();
 
@@ -34,6 +36,7 @@ namespace Taskplay
         [STAThread]
         static void Main()
         {
+
             //check for already running
             if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Length > 1)
             {
@@ -44,11 +47,13 @@ namespace Taskplay
                 return;
                 }
             }
+
             Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
             //Create the context menu and its items
             MenuItem contextItemSettings = new MenuItem();
             MenuItem contextItemExit = new MenuItem();
+
+
             //Setup the context menu items
             contextItemSettings.Text = "&Settings";
             contextItemExit.Text = "&Exit";
@@ -58,8 +63,24 @@ namespace Taskplay
             contextMenu.MenuItems.Add(contextItemSettings);
             contextMenu.MenuItems.Add(contextItemExit);
 
+            //set context menu background to dark if dark mode is on
+
+            if (windowsDarkMode)
+            {
+                contextMenuStrip.BackColor = System.Drawing.Color.FromArgb(0, 0, 0);
+                contextMenuStrip.ForeColor = System.Drawing.Color.FromArgb(255, 255, 255);
+
+                contextMenuStrip.RenderMode = ToolStripRenderMode.System;
+            }
+
+            //Setup the context menu strip items
+            contextMenuStrip.Items.Add("Settings", null, contextMenuSettings_Click);
+            contextMenuStrip.Items.Add("Exit", null, contextMenuExit_Click);
+
+
+
             //Setup next and prev icons
-            
+
 
 
             //Setup playIcon
@@ -67,7 +88,7 @@ namespace Taskplay
             playIcon.Text = "Play / Pause";
             playIcon.Visible = true;
             playIcon.MouseClick += new MouseEventHandler(playIcon_MouseClick);
-            playIcon.ContextMenu = contextMenu;
+            playIcon.ContextMenuStrip = contextMenuStrip;
 
 
 

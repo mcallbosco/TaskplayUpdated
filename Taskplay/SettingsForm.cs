@@ -33,6 +33,7 @@ namespace Taskplay
             this.syncInterval = syncInterval;
             this.waitAfterClickSync = waitAfterClickSync;
             this.showSongChangeButtonsWhilePaused = showSongChangeButtonsWhilePaused;
+            makeDarkMode();
 
 
         }
@@ -90,6 +91,54 @@ namespace Taskplay
             if (isRestartNeeded)
                 Program.hideIcons();
                 restartAction(true);
+        }
+        private void makeDarkMode()
+        {
+            bool windowsDarkMode = Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1).ToString() == "0";
+
+            if (windowsDarkMode)
+            {
+                //set background color
+                this.BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
+                for (int i = 0; i < tabControl.TabCount; i++)
+                {
+                    tabControl.TabPages[i].BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
+                }
+                //set text color
+                this.ForeColor = System.Drawing.Color.White;
+
+
+                //set button color
+                buttonOK.BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
+                buttonCancel.BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
+                buttonOK.ForeColor = System.Drawing.Color.White;
+                buttonCancel.ForeColor = System.Drawing.Color.White;
+                //set checkbox color
+                checkBoxAutorun.ForeColor = System.Drawing.Color.White;
+                checkBoxDarkMode.ForeColor = System.Drawing.Color.White;
+                checkBoxShowNextButton.ForeColor = System.Drawing.Color.White;
+                checkBoxShowPrevSong.ForeColor = System.Drawing.Color.White;
+                checkBoxPlaybackSync.ForeColor = System.Drawing.Color.White;
+                checkBoxShowSongChangeButtonsWhilePaused.ForeColor = System.Drawing.Color.White;
+                //set label color
+                labelVersion.ForeColor = System.Drawing.Color.White;
+                //set link color
+                    
+                linkLabelGitHub.LinkColor = System.Drawing.Color.White;
+                linkLabelGitHub.ActiveLinkColor = System.Drawing.Color.White;
+                    
+                linkLabelGitHub.VisitedLinkColor = System.Drawing.Color.White;
+                //set numericUpDown color
+                numericUpDownSyncInterval.BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
+                numericUpDownSyncInterval.ForeColor = System.Drawing.Color.White;
+                numericUpDownWaitAfterClickSync.BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
+                numericUpDownWaitAfterClickSync.ForeColor = System.Drawing.Color.White;
+                
+                
+
+
+            }
+
         }
     }
 }
