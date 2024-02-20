@@ -22,7 +22,7 @@ namespace Taskplay
     {
         static bool windowsDarkMode = Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1).ToString() == "0";
         static bool _isMusicPlaying = true;    // Bool to keep in check if the user is playing music
-        static bool IsDarkModeOn => GetSettingState("DarkMode");
+        static bool IsDarkModeOn => GetSettingState("DarkMode", !(Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1).ToString() == "0"));
         static bool showNextButton => GetSettingState("ShowNextButton", true);
         static bool showPrevButton => GetSettingState("ShowPrevButton", true);
         static bool IsSyncEnabled => GetSettingState("SyncEnabled", true);

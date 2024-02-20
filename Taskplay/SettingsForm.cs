@@ -1,10 +1,16 @@
-﻿using System;
+﻿using MetroFramework;
+using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Taskplay
 {
+    public struct ThemeSettings
+    {
+        public bool systemDarkMode;
+    }
+
     public partial class SettingsForm : Form
     {
         Microsoft.Win32.RegistryKey autorun;
@@ -37,9 +43,18 @@ namespace Taskplay
             this.syncInterval = syncInterval;
             this.waitAfterClickSync = waitAfterClickSync;
             this.showSongChangeButtonsWhilePaused = showSongChangeButtonsWhilePaused;
-
-
-
+            //get system accent color using winUISettings
+            var uiSettings = new Windows.UI.ViewManagement.UISettings();
+            var accentColor = uiSettings.GetColorValue(Windows.UI.ViewManagement.UIColorType.Accent);
+            //Figure out for later
+            if (Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1).ToString() == "0")
+            {
+                metroStyleManager1.Style = MetroFramework.MetroColorStyle.White;
+            }
+            else
+            {
+                metroStyleManager1.Style = MetroFramework.MetroColorStyle.Black;
+            }
         }
 
         private void SettingsForm_Load(object sender, EventArgs e)
@@ -130,6 +145,7 @@ namespace Taskplay
         {
             if (Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1).ToString() == "0")
             {
+                
                 if (DwmSetWindowAttribute(Handle, 19, new[] { 1 }, 4) != 0)
                     DwmSetWindowAttribute(Handle, 20, new[] { 1 }, 4);
             }
