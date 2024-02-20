@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace Taskplay
@@ -12,6 +14,7 @@ namespace Taskplay
         private readonly bool showPrevButton;
         private readonly bool isSyncEnabled;
         private readonly int syncInterval;
+
         private readonly int waitAfterClickSync;
         private readonly bool showSongChangeButtonsWhilePaused;
         private readonly Action<bool> restartAction;
@@ -23,6 +26,7 @@ namespace Taskplay
             int syncInterval, int waitAfterClickSync, bool showSongChangeButtonsWhilePaused)
         {
             InitializeComponent();
+            makeDarkMode();
             autorun = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Run", true);
             settings = Microsoft.Win32.Registry.CurrentUser.CreateSubKey(@"SOFTWARE\Taskplay");
             this.isDarkModeOn = isDarkModeOn;
@@ -33,7 +37,7 @@ namespace Taskplay
             this.syncInterval = syncInterval;
             this.waitAfterClickSync = waitAfterClickSync;
             this.showSongChangeButtonsWhilePaused = showSongChangeButtonsWhilePaused;
-            makeDarkMode();
+
 
 
         }
@@ -98,47 +102,47 @@ namespace Taskplay
 
             if (windowsDarkMode)
             {
-                //set background color
+                metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Dark;
                 this.BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
-                for (int i = 0; i < tabControl.TabCount; i++)
-                {
-                    tabControl.TabPages[i].BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
-                }
-                //set text color
-                this.ForeColor = System.Drawing.Color.White;
-
-
-                //set button color
-                buttonOK.BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
-                buttonCancel.BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
-                buttonOK.ForeColor = System.Drawing.Color.White;
-                buttonCancel.ForeColor = System.Drawing.Color.White;
-                //set checkbox color
-                checkBoxAutorun.ForeColor = System.Drawing.Color.White;
-                checkBoxDarkMode.ForeColor = System.Drawing.Color.White;
-                checkBoxShowNextButton.ForeColor = System.Drawing.Color.White;
-                checkBoxShowPrevSong.ForeColor = System.Drawing.Color.White;
-                checkBoxPlaybackSync.ForeColor = System.Drawing.Color.White;
-                checkBoxShowSongChangeButtonsWhilePaused.ForeColor = System.Drawing.Color.White;
-                //set label color
-                labelVersion.ForeColor = System.Drawing.Color.White;
-                //set link color
-                    
-                linkLabelGitHub.LinkColor = System.Drawing.Color.White;
-                linkLabelGitHub.ActiveLinkColor = System.Drawing.Color.White;
-                    
-                linkLabelGitHub.VisitedLinkColor = System.Drawing.Color.White;
-                //set numericUpDown color
+                //change numericUpDowns
                 numericUpDownSyncInterval.BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
                 numericUpDownSyncInterval.ForeColor = System.Drawing.Color.White;
+                
+                numericUpDownSyncInterval.BorderStyle = BorderStyle.FixedSingle;
                 numericUpDownWaitAfterClickSync.BackColor = System.Drawing.Color.FromArgb(17, 17, 17);
                 numericUpDownWaitAfterClickSync.ForeColor = System.Drawing.Color.White;
-                
-                
-
+                numericUpDownWaitAfterClickSync.BorderStyle = BorderStyle.FixedSingle;
 
             }
 
         }
+
+        private void metroCheckBox3_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Title Bar Dark Mode
+        [DllImport("DwmApi")] //System.Runtime.InteropServices
+        private static extern int DwmSetWindowAttribute(IntPtr hwnd, int attr, int[] attrValue, int attrSize);
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            if (Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1).ToString() == "0")
+            {
+                if (DwmSetWindowAttribute(Handle, 19, new[] { 1 }, 4) != 0)
+                    DwmSetWindowAttribute(Handle, 20, new[] { 1 }, 4);
+            }
+        }
+
+        private void metroLink1_Click(object sender, EventArgs e)
+        {
+            ProcessStartInfo sInfo = new ProcessStartInfo("https://github.com/mcallbosco/TaskplayUpdated");
+            Process.Start(sInfo);
+
+
+
+        }
     }
+
 }

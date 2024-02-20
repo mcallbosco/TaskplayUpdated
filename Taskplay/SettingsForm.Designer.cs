@@ -29,57 +29,262 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TabPage tabPageSync;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SettingsForm));
-            this.numericUpDownWaitAfterClickSync = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDownSyncInterval = new System.Windows.Forms.NumericUpDown();
-            this.label1 = new System.Windows.Forms.Label();
-            this.checkBoxPlaybackSync = new System.Windows.Forms.CheckBox();
-            this.tabControl = new System.Windows.Forms.TabControl();
-            this.tabPageGeneral = new System.Windows.Forms.TabPage();
-            this.checkBoxShowPrevSong = new System.Windows.Forms.CheckBox();
-            this.checkBoxShowSongChangeButtonsWhilePaused = new System.Windows.Forms.CheckBox();
-            this.checkBoxShowNextButton = new System.Windows.Forms.CheckBox();
-            this.checkBoxDarkMode = new System.Windows.Forms.CheckBox();
-            this.checkBoxAutorun = new System.Windows.Forms.CheckBox();
-            this.tabPageAbout = new System.Windows.Forms.TabPage();
-            this.linkLabelGitHub = new System.Windows.Forms.LinkLabel();
-            this.labelContribute = new System.Windows.Forms.Label();
-            this.labelSuggestions = new System.Windows.Forms.Label();
-            this.labelVersion = new System.Windows.Forms.Label();
-            this.labelTaskplay = new System.Windows.Forms.Label();
-            this.buttonCancel = new System.Windows.Forms.Button();
-            this.buttonOK = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            tabPageSync = new System.Windows.Forms.TabPage();
-            tabPageSync.SuspendLayout();
+            this.metroTabControl1 = new MetroFramework.Controls.MetroTabControl();
+            this.metroTabPage1 = new MetroFramework.Controls.MetroTabPage();
+            this.checkBoxShowSongChangeButtonsWhilePaused = new MetroFramework.Controls.MetroCheckBox();
+            this.checkBoxShowPrevSong = new MetroFramework.Controls.MetroCheckBox();
+            this.checkBoxDarkMode = new MetroFramework.Controls.MetroCheckBox();
+            this.checkBoxShowNextButton = new MetroFramework.Controls.MetroCheckBox();
+            this.checkBoxAutorun = new MetroFramework.Controls.MetroCheckBox();
+            this.metroStyleManager1 = new MetroFramework.Components.MetroStyleManager();
+            this.metroTabPage2 = new MetroFramework.Controls.MetroTabPage();
+            this.metroLabel5 = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
+            this.checkBoxPlaybackSync = new MetroFramework.Controls.MetroCheckBox();
+            this.numericUpDownWaitAfterClickSync = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDownSyncInterval = new System.Windows.Forms.NumericUpDown();
+            this.metroTabPage3 = new MetroFramework.Controls.MetroTabPage();
+            this.metroLink1 = new MetroFramework.Controls.MetroLink();
+            this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel2 = new MetroFramework.Controls.MetroLabel();
+            this.metroLabel1 = new MetroFramework.Controls.MetroLabel();
+            this.labelVersion = new MetroFramework.Controls.MetroLabel();
+            this.labelContribute = new System.Windows.Forms.Label();
+            this.metroButton1 = new MetroFramework.Controls.MetroButton();
+            this.metroButton2 = new MetroFramework.Controls.MetroButton();
+            this.metroTabControl1.SuspendLayout();
+            this.metroTabPage1.SuspendLayout();
+            this.metroTabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWaitAfterClickSync)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSyncInterval)).BeginInit();
-            this.tabControl.SuspendLayout();
-            this.tabPageGeneral.SuspendLayout();
-            this.tabPageAbout.SuspendLayout();
+            this.metroTabPage3.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tabPageSync
+            // contextMenuStrip1
             // 
-            tabPageSync.Controls.Add(this.numericUpDownWaitAfterClickSync);
-            tabPageSync.Controls.Add(this.label2);
-            tabPageSync.Controls.Add(this.numericUpDownSyncInterval);
-            tabPageSync.Controls.Add(this.label1);
-            tabPageSync.Controls.Add(this.checkBoxPlaybackSync);
-            tabPageSync.Location = new System.Drawing.Point(4, 32);
-            tabPageSync.Name = "tabPageSync";
-            tabPageSync.Padding = new System.Windows.Forms.Padding(3);
-            tabPageSync.Size = new System.Drawing.Size(346, 404);
-            tabPageSync.TabIndex = 2;
-            tabPageSync.Text = "Sync";
-            tabPageSync.UseVisualStyleBackColor = true;
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // metroTabControl1
+            // 
+            this.metroTabControl1.Controls.Add(this.metroTabPage1);
+            this.metroTabControl1.Controls.Add(this.metroTabPage2);
+            this.metroTabControl1.Controls.Add(this.metroTabPage3);
+            this.metroTabControl1.CustomBackground = false;
+            this.metroTabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.metroTabControl1.FontSize = MetroFramework.MetroTabControlSize.Medium;
+            this.metroTabControl1.FontWeight = MetroFramework.MetroTabControlWeight.Light;
+            this.metroTabControl1.Location = new System.Drawing.Point(12, 12);
+            this.metroTabControl1.Name = "metroTabControl1";
+            this.metroTabControl1.SelectedIndex = 2;
+            this.metroTabControl1.Size = new System.Drawing.Size(336, 411);
+            this.metroTabControl1.Style = MetroFramework.MetroColorStyle.Red;
+            this.metroTabControl1.StyleManager = this.metroStyleManager1;
+            this.metroTabControl1.TabIndex = 4;
+            this.metroTabControl1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.metroTabControl1.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroTabControl1.UseStyleColors = false;
+            // 
+            // metroTabPage1
+            // 
+            this.metroTabPage1.Controls.Add(this.checkBoxShowSongChangeButtonsWhilePaused);
+            this.metroTabPage1.Controls.Add(this.checkBoxShowPrevSong);
+            this.metroTabPage1.Controls.Add(this.checkBoxDarkMode);
+            this.metroTabPage1.Controls.Add(this.checkBoxShowNextButton);
+            this.metroTabPage1.Controls.Add(this.checkBoxAutorun);
+            this.metroTabPage1.CustomBackground = false;
+            this.metroTabPage1.HorizontalScrollbar = false;
+            this.metroTabPage1.HorizontalScrollbarBarColor = true;
+            this.metroTabPage1.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage1.HorizontalScrollbarSize = 10;
+            this.metroTabPage1.Location = new System.Drawing.Point(4, 39);
+            this.metroTabPage1.Name = "metroTabPage1";
+            this.metroTabPage1.Size = new System.Drawing.Size(328, 368);
+            this.metroTabPage1.Style = MetroFramework.MetroColorStyle.Red;
+            this.metroTabPage1.StyleManager = this.metroStyleManager1;
+            this.metroTabPage1.TabIndex = 0;
+            this.metroTabPage1.Text = "General";
+            this.metroTabPage1.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroTabPage1.VerticalScrollbar = false;
+            this.metroTabPage1.VerticalScrollbarBarColor = true;
+            this.metroTabPage1.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage1.VerticalScrollbarSize = 10;
+            // 
+            // checkBoxShowSongChangeButtonsWhilePaused
+            // 
+            this.checkBoxShowSongChangeButtonsWhilePaused.AutoSize = true;
+            this.checkBoxShowSongChangeButtonsWhilePaused.CustomBackground = false;
+            this.checkBoxShowSongChangeButtonsWhilePaused.FontSize = MetroFramework.MetroLinkSize.Small;
+            this.checkBoxShowSongChangeButtonsWhilePaused.FontWeight = MetroFramework.MetroLinkWeight.Regular;
+            this.checkBoxShowSongChangeButtonsWhilePaused.Location = new System.Drawing.Point(4, 112);
+            this.checkBoxShowSongChangeButtonsWhilePaused.Name = "checkBoxShowSongChangeButtonsWhilePaused";
+            this.checkBoxShowSongChangeButtonsWhilePaused.Size = new System.Drawing.Size(235, 15);
+            this.checkBoxShowSongChangeButtonsWhilePaused.Style = MetroFramework.MetroColorStyle.Blue;
+            this.checkBoxShowSongChangeButtonsWhilePaused.StyleManager = null;
+            this.checkBoxShowSongChangeButtonsWhilePaused.TabIndex = 16;
+            this.checkBoxShowSongChangeButtonsWhilePaused.Text = "Hide song change buttons while paused";
+            this.checkBoxShowSongChangeButtonsWhilePaused.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.checkBoxShowSongChangeButtonsWhilePaused.UseStyleColors = false;
+            this.checkBoxShowSongChangeButtonsWhilePaused.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShowPrevSong
+            // 
+            this.checkBoxShowPrevSong.AutoSize = true;
+            this.checkBoxShowPrevSong.CustomBackground = false;
+            this.checkBoxShowPrevSong.FontSize = MetroFramework.MetroLinkSize.Small;
+            this.checkBoxShowPrevSong.FontWeight = MetroFramework.MetroLinkWeight.Regular;
+            this.checkBoxShowPrevSong.Location = new System.Drawing.Point(4, 91);
+            this.checkBoxShowPrevSong.Name = "checkBoxShowPrevSong";
+            this.checkBoxShowPrevSong.Size = new System.Drawing.Size(168, 15);
+            this.checkBoxShowPrevSong.Style = MetroFramework.MetroColorStyle.Blue;
+            this.checkBoxShowPrevSong.StyleManager = null;
+            this.checkBoxShowPrevSong.TabIndex = 15;
+            this.checkBoxShowPrevSong.Text = "Show previous song button";
+            this.checkBoxShowPrevSong.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.checkBoxShowPrevSong.UseStyleColors = false;
+            this.checkBoxShowPrevSong.UseVisualStyleBackColor = true;
+            this.checkBoxShowPrevSong.CheckedChanged += new System.EventHandler(this.metroCheckBox3_CheckedChanged);
+            // 
+            // checkBoxDarkMode
+            // 
+            this.checkBoxDarkMode.AutoSize = true;
+            this.checkBoxDarkMode.CustomBackground = false;
+            this.checkBoxDarkMode.FontSize = MetroFramework.MetroLinkSize.Small;
+            this.checkBoxDarkMode.FontWeight = MetroFramework.MetroLinkWeight.Regular;
+            this.checkBoxDarkMode.Location = new System.Drawing.Point(4, 49);
+            this.checkBoxDarkMode.Name = "checkBoxDarkMode";
+            this.checkBoxDarkMode.Size = new System.Drawing.Size(120, 15);
+            this.checkBoxDarkMode.Style = MetroFramework.MetroColorStyle.Blue;
+            this.checkBoxDarkMode.StyleManager = null;
+            this.checkBoxDarkMode.TabIndex = 14;
+            this.checkBoxDarkMode.Text = "Dark Taskbar Icons";
+            this.checkBoxDarkMode.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.checkBoxDarkMode.UseStyleColors = false;
+            this.checkBoxDarkMode.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxShowNextButton
+            // 
+            this.checkBoxShowNextButton.AutoSize = true;
+            this.checkBoxShowNextButton.CustomBackground = false;
+            this.checkBoxShowNextButton.FontSize = MetroFramework.MetroLinkSize.Small;
+            this.checkBoxShowNextButton.FontWeight = MetroFramework.MetroLinkWeight.Regular;
+            this.checkBoxShowNextButton.Location = new System.Drawing.Point(4, 70);
+            this.checkBoxShowNextButton.Name = "checkBoxShowNextButton";
+            this.checkBoxShowNextButton.Size = new System.Drawing.Size(146, 15);
+            this.checkBoxShowNextButton.Style = MetroFramework.MetroColorStyle.Blue;
+            this.checkBoxShowNextButton.StyleManager = null;
+            this.checkBoxShowNextButton.TabIndex = 13;
+            this.checkBoxShowNextButton.Text = "Show next song button";
+            this.checkBoxShowNextButton.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.checkBoxShowNextButton.UseStyleColors = false;
+            this.checkBoxShowNextButton.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxAutorun
+            // 
+            this.checkBoxAutorun.AutoSize = true;
+            this.checkBoxAutorun.CustomBackground = false;
+            this.checkBoxAutorun.FontSize = MetroFramework.MetroLinkSize.Small;
+            this.checkBoxAutorun.FontWeight = MetroFramework.MetroLinkWeight.Regular;
+            this.checkBoxAutorun.Location = new System.Drawing.Point(4, 28);
+            this.checkBoxAutorun.Name = "checkBoxAutorun";
+            this.checkBoxAutorun.Size = new System.Drawing.Size(172, 15);
+            this.checkBoxAutorun.Style = MetroFramework.MetroColorStyle.Blue;
+            this.checkBoxAutorun.StyleManager = null;
+            this.checkBoxAutorun.TabIndex = 12;
+            this.checkBoxAutorun.Text = "Start Taskplay with Windows";
+            this.checkBoxAutorun.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.checkBoxAutorun.UseStyleColors = false;
+            this.checkBoxAutorun.UseVisualStyleBackColor = true;
+            // 
+            // metroStyleManager1
+            // 
+            this.metroStyleManager1.OwnerForm = this;
+            this.metroStyleManager1.Style = MetroFramework.MetroColorStyle.Red;
+            this.metroStyleManager1.Theme = MetroFramework.MetroThemeStyle.Light;
+            // 
+            // metroTabPage2
+            // 
+            this.metroTabPage2.Controls.Add(this.metroLabel5);
+            this.metroTabPage2.Controls.Add(this.metroLabel4);
+            this.metroTabPage2.Controls.Add(this.checkBoxPlaybackSync);
+            this.metroTabPage2.Controls.Add(this.numericUpDownWaitAfterClickSync);
+            this.metroTabPage2.Controls.Add(this.numericUpDownSyncInterval);
+            this.metroTabPage2.CustomBackground = false;
+            this.metroTabPage2.HorizontalScrollbar = false;
+            this.metroTabPage2.HorizontalScrollbarBarColor = true;
+            this.metroTabPage2.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage2.HorizontalScrollbarSize = 10;
+            this.metroTabPage2.Location = new System.Drawing.Point(4, 39);
+            this.metroTabPage2.Name = "metroTabPage2";
+            this.metroTabPage2.Size = new System.Drawing.Size(328, 368);
+            this.metroTabPage2.Style = MetroFramework.MetroColorStyle.Red;
+            this.metroTabPage2.StyleManager = this.metroStyleManager1;
+            this.metroTabPage2.TabIndex = 1;
+            this.metroTabPage2.Text = "Sync";
+            this.metroTabPage2.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroTabPage2.VerticalScrollbar = false;
+            this.metroTabPage2.VerticalScrollbarBarColor = true;
+            this.metroTabPage2.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage2.VerticalScrollbarSize = 10;
+            // 
+            // metroLabel5
+            // 
+            this.metroLabel5.AutoSize = true;
+            this.metroLabel5.CustomBackground = false;
+            this.metroLabel5.FontSize = MetroFramework.MetroLabelSize.Medium;
+            this.metroLabel5.FontWeight = MetroFramework.MetroLabelWeight.Light;
+            this.metroLabel5.LabelMode = MetroFramework.Controls.MetroLabelMode.Default;
+            this.metroLabel5.Location = new System.Drawing.Point(-4, 89);
+            this.metroLabel5.Name = "metroLabel5";
+            this.metroLabel5.Size = new System.Drawing.Size(186, 19);
+            this.metroLabel5.Style = MetroFramework.MetroColorStyle.Blue;
+            this.metroLabel5.StyleManager = null;
+            this.metroLabel5.TabIndex = 16;
+            this.metroLabel5.Text = "Time To Pause Sync After Click";
+            this.metroLabel5.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroLabel5.UseStyleColors = false;
+            // 
+            // metroLabel4
+            // 
+            this.metroLabel4.AutoSize = true;
+            this.metroLabel4.CustomBackground = false;
+            this.metroLabel4.FontSize = MetroFramework.MetroLabelSize.Medium;
+            this.metroLabel4.FontWeight = MetroFramework.MetroLabelWeight.Light;
+            this.metroLabel4.LabelMode = MetroFramework.Controls.MetroLabelMode.Default;
+            this.metroLabel4.Location = new System.Drawing.Point(-4, 53);
+            this.metroLabel4.Name = "metroLabel4";
+            this.metroLabel4.Size = new System.Drawing.Size(146, 19);
+            this.metroLabel4.Style = MetroFramework.MetroColorStyle.Blue;
+            this.metroLabel4.StyleManager = null;
+            this.metroLabel4.TabIndex = 15;
+            this.metroLabel4.Text = "Playback Check Interval";
+            this.metroLabel4.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroLabel4.UseStyleColors = false;
+            // 
+            // checkBoxPlaybackSync
+            // 
+            this.checkBoxPlaybackSync.AutoSize = true;
+            this.checkBoxPlaybackSync.CustomBackground = false;
+            this.checkBoxPlaybackSync.FontSize = MetroFramework.MetroLinkSize.Small;
+            this.checkBoxPlaybackSync.FontWeight = MetroFramework.MetroLinkWeight.Regular;
+            this.checkBoxPlaybackSync.Location = new System.Drawing.Point(0, 24);
+            this.checkBoxPlaybackSync.Name = "checkBoxPlaybackSync";
+            this.checkBoxPlaybackSync.Size = new System.Drawing.Size(165, 15);
+            this.checkBoxPlaybackSync.Style = MetroFramework.MetroColorStyle.Blue;
+            this.checkBoxPlaybackSync.StyleManager = null;
+            this.checkBoxPlaybackSync.TabIndex = 12;
+            this.checkBoxPlaybackSync.Text = "Enable Playback State Sync";
+            this.checkBoxPlaybackSync.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.checkBoxPlaybackSync.UseStyleColors = false;
+            this.checkBoxPlaybackSync.UseVisualStyleBackColor = true;
             // 
             // numericUpDownWaitAfterClickSync
             // 
-            this.numericUpDownWaitAfterClickSync.Location = new System.Drawing.Point(256, 86);
+            this.numericUpDownWaitAfterClickSync.Location = new System.Drawing.Point(244, 79);
             this.numericUpDownWaitAfterClickSync.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -87,21 +292,11 @@
             0});
             this.numericUpDownWaitAfterClickSync.Name = "numericUpDownWaitAfterClickSync";
             this.numericUpDownWaitAfterClickSync.Size = new System.Drawing.Size(84, 29);
-            this.numericUpDownWaitAfterClickSync.TabIndex = 6;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 88);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(240, 23);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Time To Pause Sync After Click";
-            this.toolTip1.SetToolTip(this.label2, resources.GetString("label2.ToolTip"));
+            this.numericUpDownWaitAfterClickSync.TabIndex = 11;
             // 
             // numericUpDownSyncInterval
             // 
-            this.numericUpDownSyncInterval.Location = new System.Drawing.Point(256, 49);
+            this.numericUpDownSyncInterval.Location = new System.Drawing.Point(242, 43);
             this.numericUpDownSyncInterval.Maximum = new decimal(new int[] {
             10000,
             0,
@@ -114,215 +309,168 @@
             0});
             this.numericUpDownSyncInterval.Name = "numericUpDownSyncInterval";
             this.numericUpDownSyncInterval.Size = new System.Drawing.Size(86, 29);
-            this.numericUpDownSyncInterval.TabIndex = 4;
+            this.numericUpDownSyncInterval.TabIndex = 9;
             this.numericUpDownSyncInterval.Value = new decimal(new int[] {
             100,
             0,
             0,
             0});
             // 
-            // label1
+            // metroTabPage3
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 51);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(189, 23);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Playback Check Interval";
+            this.metroTabPage3.Controls.Add(this.metroLink1);
+            this.metroTabPage3.Controls.Add(this.metroLabel3);
+            this.metroTabPage3.Controls.Add(this.metroLabel2);
+            this.metroTabPage3.Controls.Add(this.metroLabel1);
+            this.metroTabPage3.Controls.Add(this.labelVersion);
+            this.metroTabPage3.Controls.Add(this.labelContribute);
+            this.metroTabPage3.CustomBackground = false;
+            this.metroTabPage3.HorizontalScrollbar = false;
+            this.metroTabPage3.HorizontalScrollbarBarColor = true;
+            this.metroTabPage3.HorizontalScrollbarHighlightOnWheel = false;
+            this.metroTabPage3.HorizontalScrollbarSize = 10;
+            this.metroTabPage3.Location = new System.Drawing.Point(4, 39);
+            this.metroTabPage3.Name = "metroTabPage3";
+            this.metroTabPage3.Size = new System.Drawing.Size(328, 368);
+            this.metroTabPage3.Style = MetroFramework.MetroColorStyle.Red;
+            this.metroTabPage3.StyleManager = this.metroStyleManager1;
+            this.metroTabPage3.TabIndex = 2;
+            this.metroTabPage3.Text = "About";
+            this.metroTabPage3.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroTabPage3.VerticalScrollbar = false;
+            this.metroTabPage3.VerticalScrollbarBarColor = true;
+            this.metroTabPage3.VerticalScrollbarHighlightOnWheel = false;
+            this.metroTabPage3.VerticalScrollbarSize = 10;
             // 
-            // checkBoxPlaybackSync
+            // metroLink1
             // 
-            this.checkBoxPlaybackSync.AutoSize = true;
-            this.checkBoxPlaybackSync.Checked = true;
-            this.checkBoxPlaybackSync.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxPlaybackSync.Location = new System.Drawing.Point(14, 15);
-            this.checkBoxPlaybackSync.Name = "checkBoxPlaybackSync";
-            this.checkBoxPlaybackSync.Size = new System.Drawing.Size(241, 27);
-            this.checkBoxPlaybackSync.TabIndex = 0;
-            this.checkBoxPlaybackSync.Text = "Enable Playback State Sync";
-            this.checkBoxPlaybackSync.UseVisualStyleBackColor = true;
+            this.metroLink1.CustomBackground = false;
+            this.metroLink1.FontSize = MetroFramework.MetroLinkSize.Small;
+            this.metroLink1.FontWeight = MetroFramework.MetroLinkWeight.Bold;
+            this.metroLink1.Location = new System.Drawing.Point(11, 143);
+            this.metroLink1.Name = "metroLink1";
+            this.metroLink1.Size = new System.Drawing.Size(75, 23);
+            this.metroLink1.Style = MetroFramework.MetroColorStyle.Blue;
+            this.metroLink1.StyleManager = null;
+            this.metroLink1.TabIndex = 18;
+            this.metroLink1.Text = "GitHub";
+            this.metroLink1.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroLink1.UseStyleColors = false;
+            this.metroLink1.Click += new System.EventHandler(this.metroLink1_Click);
             // 
-            // tabControl
+            // metroLabel3
             // 
-            this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl.Controls.Add(this.tabPageGeneral);
-            this.tabControl.Controls.Add(tabPageSync);
-            this.tabControl.Controls.Add(this.tabPageAbout);
-            this.tabControl.Location = new System.Drawing.Point(6, 7);
-            this.tabControl.Name = "tabControl";
-            this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(354, 440);
-            this.tabControl.TabIndex = 0;
+            this.metroLabel3.AutoSize = true;
+            this.metroLabel3.CustomBackground = false;
+            this.metroLabel3.FontSize = MetroFramework.MetroLabelSize.Medium;
+            this.metroLabel3.FontWeight = MetroFramework.MetroLabelWeight.Light;
+            this.metroLabel3.LabelMode = MetroFramework.Controls.MetroLabelMode.Default;
+            this.metroLabel3.Location = new System.Drawing.Point(9, 121);
+            this.metroLabel3.Name = "metroLabel3";
+            this.metroLabel3.Size = new System.Drawing.Size(222, 19);
+            this.metroLabel3.Style = MetroFramework.MetroColorStyle.Blue;
+            this.metroLabel3.StyleManager = null;
+            this.metroLabel3.TabIndex = 17;
+            this.metroLabel3.Text = "Feel free to contribute to the project";
+            this.metroLabel3.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroLabel3.UseStyleColors = false;
             // 
-            // tabPageGeneral
+            // metroLabel2
             // 
-            this.tabPageGeneral.Controls.Add(this.checkBoxShowPrevSong);
-            this.tabPageGeneral.Controls.Add(this.checkBoxShowSongChangeButtonsWhilePaused);
-            this.tabPageGeneral.Controls.Add(this.checkBoxShowNextButton);
-            this.tabPageGeneral.Controls.Add(this.checkBoxDarkMode);
-            this.tabPageGeneral.Controls.Add(this.checkBoxAutorun);
-            this.tabPageGeneral.Location = new System.Drawing.Point(4, 32);
-            this.tabPageGeneral.Name = "tabPageGeneral";
-            this.tabPageGeneral.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageGeneral.Size = new System.Drawing.Size(346, 404);
-            this.tabPageGeneral.TabIndex = 0;
-            this.tabPageGeneral.Text = "General";
-            this.tabPageGeneral.UseVisualStyleBackColor = true;
+            this.metroLabel2.AutoSize = true;
+            this.metroLabel2.CustomBackground = false;
+            this.metroLabel2.FontSize = MetroFramework.MetroLabelSize.Medium;
+            this.metroLabel2.FontWeight = MetroFramework.MetroLabelWeight.Light;
+            this.metroLabel2.LabelMode = MetroFramework.Controls.MetroLabelMode.Default;
+            this.metroLabel2.Location = new System.Drawing.Point(9, 98);
+            this.metroLabel2.Name = "metroLabel2";
+            this.metroLabel2.Size = new System.Drawing.Size(206, 19);
+            this.metroLabel2.Style = MetroFramework.MetroColorStyle.Blue;
+            this.metroLabel2.StyleManager = null;
+            this.metroLabel2.TabIndex = 16;
+            this.metroLabel2.Text = "Got a suggestion or found a bug?";
+            this.metroLabel2.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroLabel2.UseStyleColors = false;
             // 
-            // checkBoxShowPrevSong
+            // metroLabel1
             // 
-            this.checkBoxShowPrevSong.AutoSize = true;
-            this.checkBoxShowPrevSong.Location = new System.Drawing.Point(6, 105);
-            this.checkBoxShowPrevSong.Name = "checkBoxShowPrevSong";
-            this.checkBoxShowPrevSong.Size = new System.Drawing.Size(245, 27);
-            this.checkBoxShowPrevSong.TabIndex = 6;
-            this.checkBoxShowPrevSong.Text = "Show previous song button";
-            this.checkBoxShowPrevSong.UseVisualStyleBackColor = true;
+            this.metroLabel1.AutoSize = true;
+            this.metroLabel1.CustomBackground = false;
+            this.metroLabel1.FontSize = MetroFramework.MetroLabelSize.Medium;
+            this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Light;
+            this.metroLabel1.LabelMode = MetroFramework.Controls.MetroLabelMode.Default;
+            this.metroLabel1.Location = new System.Drawing.Point(9, 31);
+            this.metroLabel1.Name = "metroLabel1";
+            this.metroLabel1.Size = new System.Drawing.Size(111, 19);
+            this.metroLabel1.Style = MetroFramework.MetroColorStyle.Blue;
+            this.metroLabel1.StyleManager = null;
+            this.metroLabel1.TabIndex = 15;
+            this.metroLabel1.Text = "Taskplay Updated";
+            this.metroLabel1.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroLabel1.UseStyleColors = false;
             // 
-            // checkBoxShowSongChangeButtonsWhilePaused
+            // labelVersion
             // 
-            this.checkBoxShowSongChangeButtonsWhilePaused.AutoSize = true;
-            this.checkBoxShowSongChangeButtonsWhilePaused.Location = new System.Drawing.Point(6, 138);
-            this.checkBoxShowSongChangeButtonsWhilePaused.Name = "checkBoxShowSongChangeButtonsWhilePaused";
-            this.checkBoxShowSongChangeButtonsWhilePaused.Size = new System.Drawing.Size(342, 27);
-            this.checkBoxShowSongChangeButtonsWhilePaused.TabIndex = 5;
-            this.checkBoxShowSongChangeButtonsWhilePaused.Text = "Hide song change buttons while paused";
-            this.checkBoxShowSongChangeButtonsWhilePaused.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxShowNextButton
-            // 
-            this.checkBoxShowNextButton.AutoSize = true;
-            this.checkBoxShowNextButton.Location = new System.Drawing.Point(6, 72);
-            this.checkBoxShowNextButton.Name = "checkBoxShowNextButton";
-            this.checkBoxShowNextButton.Size = new System.Drawing.Size(214, 27);
-            this.checkBoxShowNextButton.TabIndex = 4;
-            this.checkBoxShowNextButton.Text = "Show next song button";
-            this.checkBoxShowNextButton.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxDarkMode
-            // 
-            this.checkBoxDarkMode.AutoSize = true;
-            this.checkBoxDarkMode.Location = new System.Drawing.Point(6, 39);
-            this.checkBoxDarkMode.Name = "checkBoxDarkMode";
-            this.checkBoxDarkMode.Size = new System.Drawing.Size(120, 27);
-            this.checkBoxDarkMode.TabIndex = 1;
-            this.checkBoxDarkMode.Text = "Dark mode";
-            this.checkBoxDarkMode.UseVisualStyleBackColor = true;
-            // 
-            // checkBoxAutorun
-            // 
-            this.checkBoxAutorun.AutoSize = true;
-            this.checkBoxAutorun.Location = new System.Drawing.Point(6, 6);
-            this.checkBoxAutorun.Name = "checkBoxAutorun";
-            this.checkBoxAutorun.Size = new System.Drawing.Size(249, 27);
-            this.checkBoxAutorun.TabIndex = 0;
-            this.checkBoxAutorun.Text = "Start Taskplay with Windows";
-            this.checkBoxAutorun.UseVisualStyleBackColor = true;
-            // 
-            // tabPageAbout
-            // 
-            this.tabPageAbout.Controls.Add(this.linkLabelGitHub);
-            this.tabPageAbout.Controls.Add(this.labelContribute);
-            this.tabPageAbout.Controls.Add(this.labelSuggestions);
-            this.tabPageAbout.Controls.Add(this.labelVersion);
-            this.tabPageAbout.Controls.Add(this.labelTaskplay);
-            this.tabPageAbout.Location = new System.Drawing.Point(4, 32);
-            this.tabPageAbout.Name = "tabPageAbout";
-            this.tabPageAbout.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageAbout.Size = new System.Drawing.Size(346, 404);
-            this.tabPageAbout.TabIndex = 1;
-            this.tabPageAbout.Text = "About";
-            this.tabPageAbout.UseVisualStyleBackColor = true;
-            // 
-            // linkLabelGitHub
-            // 
-            this.linkLabelGitHub.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.linkLabelGitHub.AutoSize = true;
-            this.linkLabelGitHub.LinkBehavior = System.Windows.Forms.LinkBehavior.NeverUnderline;
-            this.linkLabelGitHub.Location = new System.Drawing.Point(214, 134);
-            this.linkLabelGitHub.Name = "linkLabelGitHub";
-            this.linkLabelGitHub.Size = new System.Drawing.Size(64, 23);
-            this.linkLabelGitHub.TabIndex = 8;
-            this.linkLabelGitHub.TabStop = true;
-            this.linkLabelGitHub.Text = "GitHub";
-            this.linkLabelGitHub.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelGitHub_LinkClicked);
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.CustomBackground = false;
+            this.labelVersion.FontSize = MetroFramework.MetroLabelSize.Medium;
+            this.labelVersion.FontWeight = MetroFramework.MetroLabelWeight.Light;
+            this.labelVersion.LabelMode = MetroFramework.Controls.MetroLabelMode.Default;
+            this.labelVersion.Location = new System.Drawing.Point(9, 50);
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Size = new System.Drawing.Size(70, 19);
+            this.labelVersion.Style = MetroFramework.MetroColorStyle.Blue;
+            this.labelVersion.StyleManager = null;
+            this.labelVersion.TabIndex = 14;
+            this.labelVersion.Text = "Version {0}";
+            this.labelVersion.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.labelVersion.UseStyleColors = false;
             // 
             // labelContribute
             // 
             this.labelContribute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.labelContribute.AutoSize = true;
-            this.labelContribute.Location = new System.Drawing.Point(6, 134);
+            this.labelContribute.BackColor = System.Drawing.Color.White;
+            this.labelContribute.Location = new System.Drawing.Point(7, 117);
             this.labelContribute.Name = "labelContribute";
-            this.labelContribute.Size = new System.Drawing.Size(318, 23);
-            this.labelContribute.TabIndex = 7;
-            this.labelContribute.Text = "Feel free to contribute to the project on ";
+            this.labelContribute.Size = new System.Drawing.Size(0, 23);
+            this.labelContribute.TabIndex = 12;
             // 
-            // labelSuggestions
+            // metroButton1
             // 
-            this.labelSuggestions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelSuggestions.AutoSize = true;
-            this.labelSuggestions.Location = new System.Drawing.Point(6, 117);
-            this.labelSuggestions.Name = "labelSuggestions";
-            this.labelSuggestions.Size = new System.Drawing.Size(268, 23);
-            this.labelSuggestions.TabIndex = 5;
-            this.labelSuggestions.Text = "Got a suggestion or found a bug?";
+            this.metroButton1.Highlight = false;
+            this.metroButton1.Location = new System.Drawing.Point(12, 448);
+            this.metroButton1.Name = "metroButton1";
+            this.metroButton1.Size = new System.Drawing.Size(148, 28);
+            this.metroButton1.Style = MetroFramework.MetroColorStyle.Red;
+            this.metroButton1.StyleManager = this.metroStyleManager1;
+            this.metroButton1.TabIndex = 5;
+            this.metroButton1.Text = "OK";
+            this.metroButton1.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroButton1.Click += new System.EventHandler(this.buttonOK_Click);
             // 
-            // labelVersion
+            // metroButton2
             // 
-            this.labelVersion.AutoSize = true;
-            this.labelVersion.Location = new System.Drawing.Point(6, 24);
-            this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(90, 23);
-            this.labelVersion.TabIndex = 4;
-            this.labelVersion.Text = "Version {0}";
-            // 
-            // labelTaskplay
-            // 
-            this.labelTaskplay.AutoSize = true;
-            this.labelTaskplay.Location = new System.Drawing.Point(6, 7);
-            this.labelTaskplay.Name = "labelTaskplay";
-            this.labelTaskplay.Size = new System.Drawing.Size(72, 23);
-            this.labelTaskplay.TabIndex = 2;
-            this.labelTaskplay.Text = "Taskplay";
-            // 
-            // buttonCancel
-            // 
-            this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(277, 453);
-            this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(75, 23);
-            this.buttonCancel.TabIndex = 2;
-            this.buttonCancel.Text = "Cancel";
-            this.buttonCancel.UseVisualStyleBackColor = true;
-            this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
-            // 
-            // buttonOK
-            // 
-            this.buttonOK.Location = new System.Drawing.Point(196, 453);
-            this.buttonOK.Name = "buttonOK";
-            this.buttonOK.Size = new System.Drawing.Size(75, 23);
-            this.buttonOK.TabIndex = 3;
-            this.buttonOK.Text = "OK";
-            this.buttonOK.UseVisualStyleBackColor = true;
-            this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.metroButton2.Highlight = false;
+            this.metroButton2.Location = new System.Drawing.Point(206, 448);
+            this.metroButton2.Name = "metroButton2";
+            this.metroButton2.Size = new System.Drawing.Size(146, 28);
+            this.metroButton2.Style = MetroFramework.MetroColorStyle.Red;
+            this.metroButton2.StyleManager = this.metroStyleManager1;
+            this.metroButton2.TabIndex = 6;
+            this.metroButton2.Text = "Cancel";
+            this.metroButton2.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.metroButton2.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // SettingsForm
             // 
-            this.AcceptButton = this.buttonOK;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 23F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(364, 488);
-            this.Controls.Add(this.buttonOK);
-            this.Controls.Add(this.buttonCancel);
-            this.Controls.Add(this.tabControl);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(364, 485);
+            this.Controls.Add(this.metroButton2);
+            this.Controls.Add(this.metroButton1);
+            this.Controls.Add(this.metroTabControl1);
             this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -331,42 +479,44 @@
             this.Name = "SettingsForm";
             this.Text = "Taskplay Settings";
             this.Load += new System.EventHandler(this.SettingsForm_Load);
-            tabPageSync.ResumeLayout(false);
-            tabPageSync.PerformLayout();
+            this.metroTabControl1.ResumeLayout(false);
+            this.metroTabPage1.ResumeLayout(false);
+            this.metroTabPage1.PerformLayout();
+            this.metroTabPage2.ResumeLayout(false);
+            this.metroTabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownWaitAfterClickSync)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownSyncInterval)).EndInit();
-            this.tabControl.ResumeLayout(false);
-            this.tabPageGeneral.ResumeLayout(false);
-            this.tabPageGeneral.PerformLayout();
-            this.tabPageAbout.ResumeLayout(false);
-            this.tabPageAbout.PerformLayout();
+            this.metroTabPage3.ResumeLayout(false);
+            this.metroTabPage3.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.TabPage tabPageGeneral;
-        private System.Windows.Forms.TabPage tabPageAbout;
-        private System.Windows.Forms.CheckBox checkBoxAutorun;
-        private System.Windows.Forms.Label labelTaskplay;
-        private System.Windows.Forms.Label labelContribute;
-        private System.Windows.Forms.Label labelSuggestions;
-        private System.Windows.Forms.Label labelVersion;
-        private System.Windows.Forms.LinkLabel linkLabelGitHub;
-        private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.Button buttonOK;
-        private System.Windows.Forms.CheckBox checkBoxDarkMode;
-        private System.Windows.Forms.CheckBox checkBoxShowNextButton;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox checkBoxPlaybackSync;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.NumericUpDown numericUpDownSyncInterval;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ToolTip toolTip1;
+        private MetroFramework.Controls.MetroTabControl metroTabControl1;
+        private MetroFramework.Controls.MetroTabPage metroTabPage1;
+        private MetroFramework.Controls.MetroTabPage metroTabPage2;
         private System.Windows.Forms.NumericUpDown numericUpDownWaitAfterClickSync;
-        private System.Windows.Forms.CheckBox checkBoxShowSongChangeButtonsWhilePaused;
-        private System.Windows.Forms.CheckBox checkBoxShowPrevSong;
+        private System.Windows.Forms.NumericUpDown numericUpDownSyncInterval;
+        private MetroFramework.Controls.MetroTabPage metroTabPage3;
+        private System.Windows.Forms.Label labelContribute;
+        private MetroFramework.Components.MetroStyleManager metroStyleManager1;
+        private MetroFramework.Controls.MetroButton metroButton1;
+        private MetroFramework.Controls.MetroButton metroButton2;
+        private MetroFramework.Controls.MetroCheckBox checkBoxAutorun;
+        private MetroFramework.Controls.MetroCheckBox checkBoxShowSongChangeButtonsWhilePaused;
+        private MetroFramework.Controls.MetroCheckBox checkBoxShowPrevSong;
+        private MetroFramework.Controls.MetroCheckBox checkBoxDarkMode;
+        private MetroFramework.Controls.MetroCheckBox checkBoxShowNextButton;
+        private MetroFramework.Controls.MetroCheckBox checkBoxPlaybackSync;
+        private MetroFramework.Controls.MetroLabel labelVersion;
+        private MetroFramework.Controls.MetroLabel metroLabel3;
+        private MetroFramework.Controls.MetroLabel metroLabel2;
+        private MetroFramework.Controls.MetroLabel metroLabel1;
+        private MetroFramework.Controls.MetroLabel metroLabel5;
+        private MetroFramework.Controls.MetroLabel metroLabel4;
+        private MetroFramework.Controls.MetroLink metroLink1;
     }
 }

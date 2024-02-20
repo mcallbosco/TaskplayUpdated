@@ -1,11 +1,23 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Windows.Media.Control;
 
 namespace Taskplay
 {
+    public class MyColorTable : ProfessionalColorTable
+    {
+        public override Color MenuBorder
+        {
+            get { return Color.Empty; }
+        }
+        public override Color ButtonSelectedHighlight
+        {
+            get { return Color.FromArgb(0, 69, 155); }
+        }
+    }
     static class Program
     {
         static bool windowsDarkMode = Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1).ToString() == "0";
@@ -69,13 +81,16 @@ namespace Taskplay
             {
                 contextMenuStrip.BackColor = System.Drawing.Color.FromArgb(0, 0, 0);
                 contextMenuStrip.ForeColor = System.Drawing.Color.FromArgb(255, 255, 255);
+                
 
-                contextMenuStrip.RenderMode = ToolStripRenderMode.System;
             }
 
             //Setup the context menu strip items
             contextMenuStrip.Items.Add("Settings", null, contextMenuSettings_Click);
             contextMenuStrip.Items.Add("Exit", null, contextMenuExit_Click);
+            contextMenuStrip.Renderer = new ToolStripProfessionalRenderer(new MyColorTable());
+            contextMenuStrip.ShowImageMargin = false;
+
 
 
 
