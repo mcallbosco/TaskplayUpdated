@@ -6,7 +6,7 @@ Taskplay is a small utility which adds media playback controls to the Windows Sy
 ## Info
 Taskplay is written in C#
 
-This version of taskplay has been updated to use the Contracks SDK to grab if anything is playing, so it requires a minimum of Windows 10 version 1903 and .Net framework 4.7.2
+This version of taskplay has been updated to use the Contracts SDK to grab if anything is playing, so it requires a minimum of Windows 10 version 1903 and .Net framework 4.7.2
 
 ## Download
 To download Taskplay, please go to the Releases tab of this repository.
