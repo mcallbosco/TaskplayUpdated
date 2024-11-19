@@ -109,6 +109,7 @@ namespace Taskplay
 
             var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask().Result;
             bool firstRun = true;
+            updatePlayingIcon(!_isMusicPlaying);
             updatePlayingIcon(_isMusicPlaying);
 
             if (IsSyncEnabled) {
