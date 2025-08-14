@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using System.Linq;
+using System.Threading;
 using Windows.Media.Control;
 
 namespace Taskplay
@@ -21,24 +23,13 @@ namespace Taskplay
     static class Program
     {
         static bool windowsDarkMode = Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1).ToString() == "0";
-        static bool _isMusicPlaying = true;    // Bool to keep in check if the user is playing music
         static bool IsDarkModeOn => GetSettingState("DarkMode", !(Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize", "AppsUseLightTheme", 1).ToString() == "0"));
         static bool showNextButton => GetSettingState("ShowNextButton", true);
         static bool showPrevButton => GetSettingState("ShowPrevButton", true);
         static bool IsSyncEnabled => GetSettingState("SyncEnabled", true);
         static int SyncInterval => int.Parse(GetSettingStateString("SyncInterval", "500"));
         static int waitTimeAfterClickToRefresh => int.Parse(GetSettingStateString("PauseSyncAfterClick", "3000")); //ms
-        static int waitTimeRemaining = 0;
         static bool dontShowSkipWhilePaused => GetSettingState("DontShowSkipWhilePaused");
-
-        static NotifyIcon playIcon = new NotifyIcon();
-
-        static NotifyIcon nextIcon = null;
-
-        static NotifyIcon previousIcon = null;
-
-        static ContextMenu contextMenu = new ContextMenu();
-        static ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
 
         static readonly Action<bool> restartAction = (b) => Application.Restart();
 
@@ -48,191 +39,24 @@ namespace Taskplay
         [STAThread]
         static void Main()
         {
-
-            //check for already running
-            if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Length > 1)
+            var mutex = new Mutex(true, "Taskplay_SingleInstance", out bool isNew);
+            try
             {
-                //sleep for 500 ms and then check again
-                System.Threading.Thread.Sleep(500);
-                if (System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Length > 1)
-                { MessageBox.Show("Taskplay is already running", "Taskplay", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-                }
-            }
-
-            Application.EnableVisualStyles();
-            //Create the context menu and its items
-            MenuItem contextItemSettings = new MenuItem();
-            MenuItem contextItemExit = new MenuItem();
-
-
-            //Setup the context menu items
-            contextItemSettings.Text = "&Settings";
-            contextItemExit.Text = "&Exit";
-            contextItemSettings.Click += new EventHandler(contextMenuSettings_Click);
-            contextItemExit.Click += new EventHandler(contextMenuExit_Click);
-            //Add the context menu items to the context menu
-            contextMenu.MenuItems.Add(contextItemSettings);
-            contextMenu.MenuItems.Add(contextItemExit);
-
-            //set context menu background to dark if dark mode is on
-
-            if (windowsDarkMode)
-            {
-                contextMenuStrip.BackColor = System.Drawing.Color.FromArgb(0, 0, 0);
-                contextMenuStrip.ForeColor = System.Drawing.Color.FromArgb(255, 255, 255);
-                
-
-            }
-
-            //Setup the context menu strip items
-            contextMenuStrip.Items.Add("Settings", null, contextMenuSettings_Click);
-            contextMenuStrip.Items.Add("Exit", null, contextMenuExit_Click);
-            contextMenuStrip.Renderer = new ToolStripProfessionalRenderer(new MyColorTable());
-            contextMenuStrip.ShowImageMargin = false;
-
-
-
-
-            //Setup next and prev icons
-
-
-
-            //Setup playIcon
-            updatePlayingIcon(_isMusicPlaying);
-            playIcon.Text = "Play / Pause";
-            playIcon.Visible = true;
-            playIcon.MouseClick += new MouseEventHandler(playIcon_MouseClick);
-            playIcon.ContextMenuStrip = contextMenuStrip;
-
-
-
-            var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask().Result;
-            bool firstRun = true;
-            updatePlayingIcon(!_isMusicPlaying);
-            updatePlayingIcon(_isMusicPlaying);
-
-            if (IsSyncEnabled) {
-
-
-                //run                         mediaStateChange(sessionManager, playIcon, SyncInterval); 
-                //every SyncInterval ms
-
-                Timer timer = new Timer();
-                timer.Interval = SyncInterval;
-                timer.Tick += (sender, args) => mediaStateChange(sessionManager, playIcon, SyncInterval);
-                timer.Start();
-
-
-
-
-            }
-
-
-
-
-            Application.Run();
-        }
-
-        private static void previousIcon_MouseClick(object sender, MouseEventArgs e)
-        {
-            //Send Media Key Previous Track
-            if (e.Button == MouseButtons.Left)
-            {
-                keybd_event(0xB1, 0, 0x0001, IntPtr.Zero);
-                keybd_event(0xB1, 0, 0x0002, IntPtr.Zero);
-            }
-        }
-
-        private static void playIcon_MouseClick(object sender, MouseEventArgs e)
-        {
-            //Send Media Key Play
-            if (e.Button == MouseButtons.Left)
-            {
-                keybd_event(0xB3, 0, 0x0001, IntPtr.Zero);
-                keybd_event(0xB3, 0, 0x0002, IntPtr.Zero);
-                waitTimeRemaining = waitTimeAfterClickToRefresh;
-                updatePlayingIcon(!_isMusicPlaying);
-            }
-
-            
-        }
-
-        private static void nextIcon_MouseClick(object sender, MouseEventArgs e)
-        {
-            //Send Media Key Next Track
-            if (e.Button == MouseButtons.Left)
-            {
-                keybd_event(0xB0, 0, 0x0001, IntPtr.Zero);
-                keybd_event(0xB0, 0, 0x0002, IntPtr.Zero);
-            }
-        }
-
-        private static NotifyIcon spawnNextIcon(bool doit)
-        {
-            if (!doit) return null;
-            NotifyIcon newNextIcon = new NotifyIcon();
-            //Setup nextIcon
-            newNextIcon.Icon = IsDarkModeOn ? Properties.Resources.ForwardDark : Properties.Resources.Forward;
-            newNextIcon.Text = "Next";
-            newNextIcon.Visible = showNextButton;
-            newNextIcon.MouseClick += new MouseEventHandler(nextIcon_MouseClick);
-            newNextIcon.ContextMenu = contextMenu;
-            return newNextIcon;
-        }
-
-        private static NotifyIcon spawnPreviousIcon(bool doIt)
-        {
-            if (!doIt) return null;
-            NotifyIcon newPreviousIcon = new NotifyIcon();
-            //Setup previousIcon
-            newPreviousIcon.Icon = IsDarkModeOn ? Properties.Resources.BackwardDark : Properties.Resources.Backward;
-            newPreviousIcon.Text = "Previous";
-            newPreviousIcon.Visible = true;
-            newPreviousIcon.MouseClick += new MouseEventHandler(previousIcon_MouseClick);
-            newPreviousIcon.ContextMenu = contextMenu;
-            return newPreviousIcon;
-        }
-
-
-        public static void updatePlayingIcon(bool playing)
-        {
-            if (playing == true)
-            {
-                if (_isMusicPlaying) return;
-                // Start playing music and show the pause-icon
-                playIcon.Icon = IsDarkModeOn ? Properties.Resources.PauseDark : Properties.Resources.Pause;
-                _isMusicPlaying = true;
-                playIcon.Text = "Pause";
-                //Spawn the next and previous icons if they are not already spawned
-                
-                if (nextIcon == null) nextIcon = spawnNextIcon(showNextButton);
-                if (previousIcon == null) previousIcon = spawnPreviousIcon(showPrevButton);
-                
-            }
-            else
-            {
-                if (!_isMusicPlaying) return;
-                // Pause the music and display the Play-icon
-                playIcon.Icon = IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
-                _isMusicPlaying = false;
-                playIcon.Text = "Play";
-                //Dispose the next and previous icons if we are not showing them while paused
-                if (dontShowSkipWhilePaused)
+                if (!isNew)
                 {
-                    if (nextIcon != null) nextIcon.Dispose();
-                    nextIcon = null;
-                    if (previousIcon != null) previousIcon.Dispose();
-                    previousIcon = null;
+                    MessageBox.Show("Taskplay is already running", "Taskplay", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    return;
                 }
-                else
-                {
-                    if (nextIcon == null) nextIcon = spawnNextIcon(showNextButton);
-                    if (previousIcon == null) previousIcon = spawnPreviousIcon(showPrevButton);
-                }
+
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new TrayApplicationContext());
             }
-            
-            
+            finally
+            {
+                try { if (isNew) mutex.ReleaseMutex(); } catch { }
+                try { mutex.Dispose(); } catch { }
+            }
         }
 
         private static void contextMenuSettings_Click(object sender, System.EventArgs e)
@@ -244,50 +68,8 @@ namespace Taskplay
 
         private static void contextMenuExit_Click(object sender, System.EventArgs e)
         {
-            hideIcons();
-            //sleep for 500 ms
-            System.Threading.Thread.Sleep(500);
-
-
-            //Exit the app
             Application.Exit();
         }
-
-        
-
-        //listener for media events
-        private static void mediaStateChange(GlobalSystemMediaTransportControlsSessionManager sessionManager1, NotifyIcon playIcon, int refreshIntervalForMediaState)
-        {
-            //wait for the interval to pass
-            if (waitTimeRemaining > 0)
-            {
-                waitTimeRemaining -= refreshIntervalForMediaState;
-                return;
-            } else
-            {
-                waitTimeRemaining = 0;
-            }
-
-
-            // check through all sessions to see if anything is playing
-            //var sessionManager = GlobalSystemMediaTransportControlsSessionManager.RequestAsync().AsTask().Result;
-
-            for (int i = 0; i < sessionManager1.GetSessions().Count; i++)
-            {
-                if (sessionManager1.GetSessions()[i].GetPlaybackInfo().PlaybackStatus.ToString() == "Playing")
-                {
-                    if (_isMusicPlaying == false) updatePlayingIcon(true);
-                    return;
-                }
-
-            }
-            if (_isMusicPlaying == true) updatePlayingIcon(false);
-
-            
-
-        }
-
-
 
         private static bool GetSettingState(string settingName, bool defaultValueBool = false)
         {
@@ -320,16 +102,172 @@ namespace Taskplay
 
             return keyValue.ToString();
         }
-        public static void hideIcons()
+
+        private sealed class TrayApplicationContext : ApplicationContext
         {
-            playIcon?.Dispose();
-            nextIcon?.Dispose();
-            previousIcon?.Dispose();
+            private readonly NotifyIcon playIcon = new NotifyIcon();
+            private readonly NotifyIcon nextIcon = new NotifyIcon();
+            private readonly NotifyIcon previousIcon = new NotifyIcon();
+            private ContextMenuStrip contextMenuStrip;
+            private GlobalSystemMediaTransportControlsSessionManager sessionManager;
+            private bool isMusicPlaying;
 
+            public TrayApplicationContext()
+            {
+                InitializeTray();
+                InitializeMedia();
+            }
+
+            private void InitializeTray()
+            {
+                contextMenuStrip = new ContextMenuStrip();
+                if (windowsDarkMode)
+                {
+                    contextMenuStrip.BackColor = Color.FromArgb(0, 0, 0);
+                    contextMenuStrip.ForeColor = Color.FromArgb(255, 255, 255);
+                }
+                contextMenuStrip.Renderer = new ToolStripProfessionalRenderer(new MyColorTable());
+                contextMenuStrip.ShowImageMargin = false;
+                contextMenuStrip.Items.Add("Settings", null, contextMenuSettings_Click);
+                contextMenuStrip.Items.Add("Exit", null, contextMenuExit_Click);
+
+                // Play/Pause icon (initialize as not playing)
+                playIcon.Icon = Program.IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
+                playIcon.Text = "Play / Pause";
+                playIcon.Visible = true;
+                playIcon.MouseClick += PlayIcon_MouseClick;
+                playIcon.ContextMenuStrip = contextMenuStrip;
+
+                // Next icon
+                nextIcon.Icon = Program.IsDarkModeOn ? Properties.Resources.ForwardDark : Properties.Resources.Forward;
+                nextIcon.Text = "Next";
+                nextIcon.Visible = Program.showNextButton;
+                nextIcon.MouseClick += NextIcon_MouseClick;
+                nextIcon.ContextMenuStrip = contextMenuStrip;
+
+                // Previous icon
+                previousIcon.Icon = Program.IsDarkModeOn ? Properties.Resources.BackwardDark : Properties.Resources.Backward;
+                previousIcon.Text = "Previous";
+                previousIcon.Visible = Program.showPrevButton;
+                previousIcon.MouseClick += PreviousIcon_MouseClick;
+                previousIcon.ContextMenuStrip = contextMenuStrip;
+
+                UpdateSkipIconsVisibility();
+            }
+
+            private async void InitializeMedia()
+            {
+                sessionManager = await GlobalSystemMediaTransportControlsSessionManager.RequestAsync();
+                sessionManager.SessionsChanged += (_, __) => WireUpSessions();
+                sessionManager.CurrentSessionChanged += (_, __) => UpdateFromSessions();
+                WireUpSessions();
+            }
+
+            private void WireUpSessions()
+            {
+                foreach (var session in sessionManager.GetSessions())
+                {
+                    try
+                    {
+                        session.PlaybackInfoChanged -= Session_PlaybackInfoChanged;
+                        session.PlaybackInfoChanged += Session_PlaybackInfoChanged;
+                    }
+                    catch { }
+                }
+                UpdateFromSessions();
+            }
+
+            private void Session_PlaybackInfoChanged(GlobalSystemMediaTransportControlsSession sender, object args)
+            {
+                UpdateFromSessions();
+            }
+
+            private void UpdateFromSessions()
+            {
+                bool anyPlaying = false;
+                try
+                {
+                    anyPlaying = sessionManager
+                        .GetSessions()
+                        .Any(s => s.GetPlaybackInfo()?.PlaybackStatus == GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing);
+                }
+                catch { }
+                UpdatePlayingIcon(anyPlaying);
+                UpdateSkipIconsVisibility();
+            }
+
+            private void UpdateSkipIconsVisibility()
+            {
+                bool showSkips = isMusicPlaying || !Program.dontShowSkipWhilePaused;
+                nextIcon.Visible = Program.showNextButton && showSkips;
+                previousIcon.Visible = Program.showPrevButton && showSkips;
+            }
+
+            private async void PlayIcon_MouseClick(object sender, MouseEventArgs e)
+            {
+                if (e.Button != MouseButtons.Left) return;
+                try
+                {
+                    var current = sessionManager?.GetCurrentSession();
+                    if (current != null)
+                    {
+                        await current.TryTogglePlayPauseAsync();
+                    }
+                }
+                catch { }
+            }
+
+            private async void NextIcon_MouseClick(object sender, MouseEventArgs e)
+            {
+                if (e.Button != MouseButtons.Left) return;
+                try
+                {
+                    var current = sessionManager?.GetCurrentSession();
+                    if (current != null)
+                    {
+                        await current.TrySkipNextAsync();
+                    }
+                }
+                catch { }
+            }
+
+            private async void PreviousIcon_MouseClick(object sender, MouseEventArgs e)
+            {
+                if (e.Button != MouseButtons.Left) return;
+                try
+                {
+                    var current = sessionManager?.GetCurrentSession();
+                    if (current != null)
+                    {
+                        await current.TrySkipPreviousAsync();
+                    }
+                }
+                catch { }
+            }
+
+            private void UpdatePlayingIcon(bool playing)
+            {
+                if (isMusicPlaying == playing) return;
+                isMusicPlaying = playing;
+                if (playing)
+                {
+                    playIcon.Icon = Program.IsDarkModeOn ? Properties.Resources.PauseDark : Properties.Resources.Pause;
+                    playIcon.Text = "Pause";
+                }
+                else
+                {
+                    playIcon.Icon = Program.IsDarkModeOn ? Properties.Resources.PlayDark : Properties.Resources.Play;
+                    playIcon.Text = "Play";
+                }
+            }
+
+            protected override void ExitThreadCore()
+            {
+                try { playIcon.Dispose(); } catch { }
+                try { nextIcon.Dispose(); } catch { }
+                try { previousIcon.Dispose(); } catch { }
+                base.ExitThreadCore();
+            }
         }
-
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern void keybd_event(byte virtualKey, byte scanCode, uint flags, IntPtr extraInfo);
     }
 }

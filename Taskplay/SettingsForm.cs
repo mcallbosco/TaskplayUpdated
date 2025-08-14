@@ -108,8 +108,9 @@ namespace Taskplay
             SaveSettings();
             Close();
             if (isRestartNeeded)
-                Program.hideIcons();
+            {
                 restartAction(true);
+            }
         }
         private void makeDarkMode()
         {
